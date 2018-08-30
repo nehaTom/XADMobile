@@ -1,4 +1,4 @@
-package com.example.codemaven3015.xadmobile;
+package com.example.codemaven3015.xadmobile.activity;
 
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+
+import com.example.codemaven3015.xadmobile.R;
 
 public class Donate extends AppCompatActivity {
 
