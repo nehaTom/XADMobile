@@ -1,7 +1,5 @@
 package com.example.codemaven3015.xadmobile.activity;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -13,13 +11,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.codemaven3015.xadmobile.R;
-import com.example.codemaven3015.xadmobile.fragment.FragmentLogin;
+import com.example.codemaven3015.xadmobile.fragment.FragmentOtpVarification;
+import com.example.codemaven3015.xadmobile.helper.GenericTextWatcher;
 
 public class Login extends AppCompatActivity {
 
@@ -36,7 +37,7 @@ public class Login extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    public static ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +53,14 @@ public class Login extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,6 +93,8 @@ public class Login extends AppCompatActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        EditText et1, et2, et3, et4;
+        Button verfyButton,changePhoneButton,resendButton;
 
         public PlaceholderFragment() {
         }
@@ -106,12 +114,76 @@ public class Login extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_login, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            View rootView;
+            int i = getArguments().getInt(ARG_SECTION_NUMBER);
+            if (i == 0) {
+                rootView = inflater.inflate(R.layout.fragment_login, container, false);
+                Button button = rootView.findViewById(R.id.phoneButton);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        callNext();
+                    }
+                });
+            } else {
+                rootView = inflater.inflate(R.layout.fragment_otp, container, false);
+                setWidgets(rootView);
+            }
             return rootView;
         }
+
+        private void callNext() {
+            mViewPager.setCurrentItem(1);
+        }
+
+        private void setWidgets(View v) {
+            verfyButton = v.findViewById(R.id.verfyButton);
+            changePhoneButton = v.findViewById(R.id.changePhoneButton);
+            resendButton = v.findViewById(R.id.resendButton);
+            et1 = v.findViewById(R.id.editText1);
+            et2 = v.findViewById(R.id.editText2);
+            et3 = v.findViewById(R.id.editText3);
+            et4 = v.findViewById(R.id.editText4);
+            et1.addTextChangedListener(new GenericTextWatcher(et1,et2,et3,et4));
+            et2.addTextChangedListener(new GenericTextWatcher(et2,et2,et3,et4));
+            et3.addTextChangedListener(new GenericTextWatcher(et3,et2,et3,et4));
+            et4.addTextChangedListener(new GenericTextWatcher(et4,et2,et3,et4));
+            verfyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    verfyOTP();
+                }
+            });
+
+            changePhoneButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeNumber();
+                }
+            });
+
+            resendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    resendButtonotp();
+                }
+            });
+        }
+
+        private void changeNumber() {
+            mViewPager.setCurrentItem(0);
+        }
+
+        private void verfyOTP() {
+            mViewPager.setCurrentItem(2);
+        }
+        private void resendButtonotp(){
+
+        }
+
+
     }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -129,16 +201,19 @@ public class Login extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position){
                 case 0:
-                    FragmentLogin fragmentLogin = new FragmentLogin();
-                    return fragmentLogin;
+                    return PlaceholderFragment.newInstance(0);
 
                 case 1:
-                    return PlaceholderFragment.newInstance(position + 1);
+                    return PlaceholderFragment.newInstance(1);
+
+                case 2:
+                    FragmentOtpVarification fragmentOtpVarification = new FragmentOtpVarification();
+                    return fragmentOtpVarification;
 
                  default:
                         return PlaceholderFragment.newInstance(position + 1);
             }
-            //return PlaceholderFragment.newInstance(position + 1);
+
         }
 
         @Override
@@ -147,4 +222,11 @@ public class Login extends AppCompatActivity {
             return 3;
         }
     }
+
+
+
+
+
 }
+
+
