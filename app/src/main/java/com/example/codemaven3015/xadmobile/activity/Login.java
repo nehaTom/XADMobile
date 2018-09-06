@@ -93,7 +93,7 @@ public class Login extends AppCompatActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-        EditText et1, et2, et3, et4;
+        EditText et1, et2, et3, et4, phoneEditText,firstNameEditText,lastNameEditText;
         Button verfyButton,changePhoneButton,resendButton;
 
         public PlaceholderFragment() {
@@ -115,14 +115,20 @@ public class Login extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView;
+
             int i = getArguments().getInt(ARG_SECTION_NUMBER);
             if (i == 0) {
                 rootView = inflater.inflate(R.layout.fragment_login, container, false);
                 Button button = rootView.findViewById(R.id.phoneButton);
+                firstNameEditText=rootView.findViewById(R.id.name_editText);
+                lastNameEditText=rootView.findViewById(R.id.nameLast_editText);
+                phoneEditText = rootView.findViewById(R.id.login_editText);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        callNext();
+                        if(inputValidation()) {
+                            callNext();
+                        }
                     }
                 });
             } else {
@@ -131,7 +137,23 @@ public class Login extends AppCompatActivity {
             }
             return rootView;
         }
+        private boolean inputValidation(){
+            if(phoneEditText.getText().length()<10){
+                phoneEditText.setError("Invalid phone number");
+                return false;
+            }else if(phoneEditText.getText().toString().isEmpty()){
+                phoneEditText.setError("Enter phone number");
+                return false;
+            }else if(firstNameEditText.getText().toString().isEmpty()){
+                firstNameEditText.setError("Enter first Name");
+                return false;
 
+            }else if(lastNameEditText.getText().toString().isEmpty()){
+                lastNameEditText.setError("Enter Last name");
+                return false;
+            }
+            return true;
+        }
         private void callNext() {
             mViewPager.setCurrentItem(1);
         }

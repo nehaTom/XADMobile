@@ -1,5 +1,6 @@
 package com.example.codemaven3015.xadmobile.activity;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,9 +18,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.codemaven3015.xadmobile.R;
+import com.example.codemaven3015.xadmobile.fragment.DonateCSR;
+import com.example.codemaven3015.xadmobile.fragment.DonateMoney;
+import com.example.codemaven3015.xadmobile.fragment.SpaceForStorage;
+import com.example.codemaven3015.xadmobile.fragment.WorkAsVolunter;
 
 public class Donate extends AppCompatActivity {
 
@@ -58,14 +69,14 @@ public class Donate extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
     }
 
@@ -100,6 +111,11 @@ public class Donate extends AppCompatActivity {
          * The fragment argument representing the section number for this
          * fragment.
          */
+        Spinner category_spinner,nearest_center;
+        ImageView deviceImagView;
+        EditText deviceNameEditText,DeviceDescripEditText,remarkEditText;
+        RadioGroup working_statusRG,radio_markRG;
+        Button submit_button;
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public PlaceholderFragment() {
@@ -118,12 +134,61 @@ public class Donate extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.activity_assistive_device, container, false);
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            initWidgets(rootView);
+             submit_button.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     if(inputValidate()){
+                         Intent intent=new Intent(getContext(),DonatedList.class);
+                         startActivity(intent);
+
+                     }
+                 }
+             });
             return rootView;
+        }
+
+        private void initWidgets(View rootView) {
+            category_spinner=rootView.findViewById(R.id.category_spinner);
+            nearest_center=rootView.findViewById(R.id.nearest_center);
+
+            deviceImagView=rootView.findViewById(R.id.imv);
+
+            deviceNameEditText=rootView.findViewById(R.id.device_name);
+            DeviceDescripEditText=rootView.findViewById(R.id.message);
+            remarkEditText=rootView.findViewById(R.id.remark);
+
+            working_statusRG=rootView.findViewById(R.id.working_status);
+            radio_markRG=rootView.findViewById(R.id.radio_mark);
+
+            submit_button=rootView.findViewById(R.id.button);
+        }
+
+        private boolean inputValidate(){
+            if(deviceNameEditText.getText().toString().isEmpty()){
+                deviceNameEditText.setError("Enter device name ");
+                return false;
+            }else if(DeviceDescripEditText.getText().toString().isEmpty()){
+                DeviceDescripEditText.setError("Enter device description ");
+                return false;
+            }else if(remarkEditText.getText().toString().isEmpty()){
+                remarkEditText.setError("Enter the remarks ");
+                return false;
+            }else if(working_statusRG.getCheckedRadioButtonId() == -1){
+                Toast.makeText(getContext(),"Please Select one working status of device ",
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            }else if(radio_markRG.getCheckedRadioButtonId() == -1){
+                Toast.makeText(getContext(),"Please Select one mark ",
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            return true;
         }
     }
 
@@ -141,13 +206,33 @@ public class Donate extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch ((position)){
+                case 0:
+                    return PlaceholderFragment.newInstance(position + 1);
+
+                case 3:
+                    DonateMoney donateMoney = new DonateMoney();
+                    return donateMoney;
+                case 1:
+                    WorkAsVolunter wrkasv = new WorkAsVolunter();
+                    return wrkasv;
+                case 2:
+                    SpaceForStorage spaceForStorage = new SpaceForStorage();
+                    return spaceForStorage;
+                case 4:
+                    DonateCSR donateCSR = new DonateCSR();
+                    return donateCSR;
+
+                default:
+                    return PlaceholderFragment.newInstance(position + 1);
+            }
+
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 5;
         }
     }
 }

@@ -46,7 +46,7 @@
                 android:gravity="center"
                 android:hint="Name"
                 android:inputType="textPersonName"
-                android:maxLength="10" />
+                 />
 
         </LinearLayout>
 
@@ -76,7 +76,7 @@
                 android:gravity="center"
                 android:hint="Name"
                 android:inputType="textPersonName"
-                android:maxLength="10" />
+                 />
 
         </LinearLayout>
 

@@ -38,13 +38,20 @@
         <activity
             android:name=".activity.Home"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+
+
+        </activity>
         <activity
             android:name=".activity.Login"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.Request" />
-        <activity android:name=".activity.Profile" />
+        <activity android:name=".activity.Request" >
+
+        </activity>
+        <activity android:name=".activity.Profile" >
+
+        </activity>
         <activity
             android:name=".activity.DonatedList"
             android:label="@string/title_activity_donated_list"
