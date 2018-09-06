@@ -17,10 +17,18 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.example.codemaven3015.xadmobile.R;
+import com.example.codemaven3015.xadmobile.api.VolleyJSONRequest;
 import com.example.codemaven3015.xadmobile.fragment.FragmentOtpVarification;
 import com.example.codemaven3015.xadmobile.helper.GenericTextWatcher;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class Login extends AppCompatActivity {
 
@@ -141,7 +149,7 @@ public class Login extends AppCompatActivity {
             if(phoneEditText.getText().length()<10){
                 phoneEditText.setError("Invalid phone number");
                 return false;
-            }else if(phoneEditText.getText().toString().isEmpty()){
+            }else if(phoneEditText.getText().toString().trim().isEmpty()){
                 phoneEditText.setError("Enter phone number");
                 return false;
             }else if(firstNameEditText.getText().toString().isEmpty()){
@@ -155,7 +163,37 @@ public class Login extends AppCompatActivity {
             return true;
         }
         private void callNext() {
-            mViewPager.setCurrentItem(1);
+            String url = "http://xadnew.quickbooksupport365.com/service/login.php";
+            HashMap<String, String> params = new HashMap<>();
+            params.put("login","1");
+            params.put("mobile_no",phoneEditText.getText().toString());
+            VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
+            volleyJSONRequest.executeRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+                @Override
+                public void onSuccess(JSONObject obj) {
+                    try {
+                        String status = obj.getString("status");
+                        if(status.equalsIgnoreCase("success")){
+                            mViewPager.setCurrentItem(1);
+
+                        }else{
+                            String msg=obj.getString("message");
+                            Toast.makeText(getContext(),msg,
+                                    Toast.LENGTH_LONG).show();
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(VolleyError error) {
+                    Toast.makeText(getContext(),error.getMessage().toString(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+            //mViewPager.setCurrentItem(1);
         }
 
         private void setWidgets(View v) {
