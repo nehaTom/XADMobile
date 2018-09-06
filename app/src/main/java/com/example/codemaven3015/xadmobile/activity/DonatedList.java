@@ -3,6 +3,7 @@ package com.example.codemaven3015.xadmobile.activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.codemaven3015.xadmobile.R;
+import com.example.codemaven3015.xadmobile.adapter.ListAdapter;
+import com.example.codemaven3015.xadmobile.helper.SpacesItemDecoration;
 
 public class DonatedList extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -24,16 +27,6 @@ public class DonatedList extends AppCompatActivity
         setContentView(R.layout.activity_donated_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -42,6 +35,16 @@ public class DonatedList extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setListAdapter();
+
+    }
+
+    private void setListAdapter() {
+        RecyclerView list_recycler_view = findViewById(R.id.list_recycler_view);
+        ListAdapter adapter = new ListAdapter(this);
+        list_recycler_view.addItemDecoration(new SpacesItemDecoration(15));
+        list_recycler_view.setAdapter(adapter);
     }
 
     @Override
