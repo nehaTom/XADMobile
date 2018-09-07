@@ -1,5 +1,7 @@
 package com.example.codemaven3015.xadmobile.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -8,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +49,8 @@ public class Login extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     public static ViewPager mViewPager;
+    public static SharedPreferences sharedPreferences;
+    public static SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,8 @@ public class Login extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        sharedPreferences = this.getSharedPreferences("User_Info", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -163,17 +170,25 @@ public class Login extends AppCompatActivity {
             return true;
         }
         private void callNext() {
-            String url = "http://xadnew.quickbooksupport365.com/service/login.php";
+            String url = "http://xadnew.quickbooksupport365.com/service/register.php";
             HashMap<String, String> params = new HashMap<>();
-            params.put("login","1");
+            params.put("register","1");
             params.put("mobile_no",phoneEditText.getText().toString());
+            params.put("first_name",firstNameEditText.getText().toString());
+            params.put("last_name",lastNameEditText.getText().toString());
             VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
-            volleyJSONRequest.executeRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+            volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
                 @Override
                 public void onSuccess(JSONObject obj) {
+
                     try {
                         String status = obj.getString("status");
                         if(status.equalsIgnoreCase("success")){
+                            editor.putString("PHONE",phoneEditText.getText().toString());
+                            JSONObject objData = new JSONObject();
+                            objData = obj.getJSONObject("data");
+                            editor.putString("LAST_ID",objData.getString("last_insert_id"));
+                            editor.commit();
                             mViewPager.setCurrentItem(1);
 
                         }else{
@@ -185,15 +200,46 @@ public class Login extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }
 
                 @Override
                 public void onFailure(VolleyError error) {
-                    Toast.makeText(getContext(),error.getMessage().toString(),
-                            Toast.LENGTH_LONG).show();
+
                 }
             });
-            //mViewPager.setCurrentItem(1);
+//            volleyJSONRequest.executeRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+//                @Override
+//                public void onSuccess(JSONObject obj) {
+//                    Log.e("Res",obj.toString());
+//                    try {
+//                        String status = obj.getString("status");
+//                        if(status.equalsIgnoreCase("success")){
+//                            editor.putString("PHONE",phoneEditText.getText().toString());
+//                            JSONObject objData = new JSONObject();
+//                            objData = obj.getJSONObject("data");
+//                            editor.putString("LAST_ID",objData.getString("last_insert_id"));
+//                            editor.commit();
+//                            mViewPager.setCurrentItem(1);
+//
+//                        }else{
+//                            String msg=obj.getString("message");
+//                            Toast.makeText(getContext(),msg,
+//                                    Toast.LENGTH_LONG).show();
+//
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(VolleyError error) {
+//                    Toast.makeText(getContext(),error.getMessage().toString(),
+//                            Toast.LENGTH_LONG).show();
+//                }
+//            });
+//            //mViewPager.setCurrentItem(1);
         }
 
         private void setWidgets(View v) {
@@ -235,7 +281,42 @@ public class Login extends AppCompatActivity {
         }
 
         private void verfyOTP() {
-            mViewPager.setCurrentItem(2);
+
+            String url = "http://xadnew.quickbooksupport365.com/service/register.php";
+            HashMap<String, String> params = new HashMap<>();
+            params.put("varify","1");
+            params.put("mobile_no",sharedPreferences.getString("PHONE",""));
+            params.put("otp","1234");
+            params.put("last_inser_id",sharedPreferences.getString("LAST_ID",""));
+            VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
+            volleyJSONRequest.executeRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+                @Override
+                public void onSuccess(JSONObject obj) {
+                    Log.e("Res",obj.toString());
+                    try {
+                        String status = obj.getString("status");
+                        if(status.equalsIgnoreCase("success")){
+                            mViewPager.setCurrentItem(2);
+
+                        }else{
+                            String msg=obj.getString("message");
+                            Toast.makeText(getContext(),msg,
+                                    Toast.LENGTH_LONG).show();
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(VolleyError error) {
+                    Toast.makeText(getContext(),error.getMessage().toString(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+
+            //mViewPager.setCurrentItem(2);
         }
         private void resendButtonotp(){
 

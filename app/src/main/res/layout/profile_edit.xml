@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,6 +40,7 @@
                     android:inputType="text"
                     android:padding="10dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,6 +90,7 @@
                     android:inputType="textEmailAddress"
                     android:padding="10dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,10 +112,11 @@
                     android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
                     android:hint="9867543213"
-                    android:maxLength="10"
                     android:inputType="number"
+                    android:maxLength="10"
                     android:padding="10dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -137,6 +142,7 @@
                     android:maxLength="12"
                     android:padding="10dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -174,19 +180,20 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="10dp"
-                    android:text="Change Password" />
+                    android:text="Pan Card No" />
 
                 <EditText
-                    android:id="@+id/password"
+                    android:id="@+id/panNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
-                    android:hint="986754321323"
-                    android:inputType="textWebPassword"
-                    android:maxLength="12"
+                    android:hint="ANRPR2356J"
+                    android:inputType="text"
+                    android:maxLength="10"
                     android:padding="10dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -202,36 +209,39 @@
                     android:text="Gender" />
 
                 <RadioGroup
+                    android:id="@+id/gender"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/gender">
+                    android:layout_height="wrap_content">
 
                     <RadioButton
+                        android:id="@+id/male"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Male"
-                        android:id="@+id/male"/>
+                        android:text="Male" />
 
                     <RadioButton
+                        android:id="@+id/female"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Female"
-                        android:id="@+id/female"/>
+                        android:text="Female" />
+
                     <RadioButton
+                        android:id="@+id/transgender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Transgender"
-                        android:id="@+id/transgender"/>
+                        android:text="Transgender" />
                 </RadioGroup>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:orientation="vertical"
                 android:padding="10dp">
+
                 <Button
                     android:id="@+id/update"
                     android:layout_width="wrap_content"

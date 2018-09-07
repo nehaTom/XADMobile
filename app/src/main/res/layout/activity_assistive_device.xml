@@ -2,18 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="40dp">
+        android:layout_margin="20dp"
+        android:background="@drawable/border_square_pink"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            android:background="@drawable/border_square_pink"
+            android:layout_height="wrap_content"
+
             android:orientation="vertical">
 
             <LinearLayout
@@ -33,17 +35,19 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
-                    android:padding="10dp"
-                    android:layout_marginTop="5dp">
-                <Spinner
-                    android:id="@+id/category_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:padding="10dp">
 
-                </Spinner>
+                    <Spinner
+                        android:id="@+id/category_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </Spinner>
+                </LinearLayout>
             </LinearLayout>
-            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,21 +111,24 @@
                     android:gravity="center"
                     android:padding="10dp"
                     android:text="Nearest Facilation Center" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
-                    android:padding="10dp"
-                    android:layout_marginTop="5dp">
-                <Spinner
-                    android:id="@+id/nearest_center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:padding="10dp">
 
-                </Spinner>
+                    <Spinner
+                        android:id="@+id/nearest_center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </Spinner>
+                </LinearLayout>
+
             </LinearLayout>
 
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -141,11 +148,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:inputType="textMultiLine"
                     android:background="@drawable/border_square"
                     android:hint="Remark/Suggestion/Observation"
+                    android:inputType="textMultiLine"
                     android:padding="10dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -159,20 +167,23 @@
                     android:layout_gravity="center"
                     android:padding="10dp"
                     android:text="Upload photo your device" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
-                    android:padding="10dp"
-                    android:layout_marginTop="5dp">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:id="@+id/imv"
-                    android:background="@mipmap/ic_launcher"/>
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/imv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/ic_launcher" />
+                </LinearLayout>
             </LinearLayout>
-            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -188,22 +199,22 @@
                     android:text="Working Status" />
 
                 <RadioGroup
+                    android:id="@+id/working_status"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/working_status">
+                    android:layout_height="wrap_content">
 
                     <RadioButton
+                        android:id="@+id/working"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Working"
-                        android:id="@+id/working"/>
+                        android:text="Working" />
 
                     <RadioButton
+                        android:id="@+id/not_working"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Not Working"
-                        android:id="@+id/not_working"/>
+                        android:text="Not Working" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -222,21 +233,21 @@
                     android:text="Mark Product for Donation" />
 
                 <RadioGroup
+                    android:id="@+id/radio_mark"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/radio_mark">
+                    android:layout_height="wrap_content">
 
                     <RadioButton
+                        android:id="@+id/yes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Yes"
-                        android:id="@+id/yes"/>
+                        android:text="Yes" />
 
                     <RadioButton
+                        android:id="@+id/no"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:id="@+id/no"
                         android:text="No" />
                 </RadioGroup>
             </LinearLayout>
@@ -247,6 +258,7 @@
                 android:layout_margin="10dp"
                 android:orientation="vertical"
                 android:padding="10dp">
+
                 <Button
                     android:id="@+id/button"
                     android:layout_width="wrap_content"

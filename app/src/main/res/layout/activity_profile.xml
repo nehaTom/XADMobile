@@ -5,5 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.Profile">
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/profile_Edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <include
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/profile_edit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/profile_View"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <include
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/profile_view" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
