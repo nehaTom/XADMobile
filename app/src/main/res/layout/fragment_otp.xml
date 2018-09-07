@@ -60,31 +60,33 @@
         android:textColor="#ffffff"
         android:text="VERIFY OTP"
         android:background="@color/colorAccent"/>
+
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
             <Button
 
                 android:id="@+id/changePhoneButton"
-                android:layout_marginTop="195dp"
-                android:layout_marginBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:textColor="@color/colorAccent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="195dp"
+                android:background="#ffffff"
                 android:text="Change Phone No."
-                android:background="#ffffff"/>
+                android:textColor="@color/colorAccent" />
+
             <Button
                 android:id="@+id/resendButton"
-                android:layout_marginTop="195dp"
-                android:layout_marginBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:textColor="@color/colorAccent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="195dp"
+                android:background="#ffffff"
                 android:text="Resend Otp"
-                android:background="#ffffff"/>
+                android:textColor="@color/colorAccent" />
         </RelativeLayout>
 
 

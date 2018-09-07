@@ -1,5 +1,6 @@
 package com.example.codemaven3015.xadmobile.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class Login extends AppCompatActivity {
     public static ViewPager mViewPager;
     public static SharedPreferences sharedPreferences;
     public static SharedPreferences.Editor editor;
+    static ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,9 +179,14 @@ public class Login extends AppCompatActivity {
             params.put("first_name",firstNameEditText.getText().toString());
             params.put("last_name",lastNameEditText.getText().toString());
             VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Sending OTP");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
             volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
                 @Override
                 public void onSuccess(JSONObject obj) {
+                    progressDialog.hide();
 
                     try {
                         String status = obj.getString("status");
@@ -188,6 +195,7 @@ public class Login extends AppCompatActivity {
                             JSONObject objData = new JSONObject();
                             objData = obj.getJSONObject("data");
                             editor.putString("LAST_ID",objData.getString("last_insert_id"));
+                            editor.putString("FIRST_NAME",firstNameEditText.getText().toString());
                             editor.commit();
                             mViewPager.setCurrentItem(1);
 
@@ -205,6 +213,7 @@ public class Login extends AppCompatActivity {
 
                 @Override
                 public void onFailure(VolleyError error) {
+                    progressDialog.hide();
 
                 }
             });
@@ -289,10 +298,11 @@ public class Login extends AppCompatActivity {
             params.put("otp","1234");
             params.put("last_inser_id",sharedPreferences.getString("LAST_ID",""));
             VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
-            volleyJSONRequest.executeRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+            volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
                 @Override
                 public void onSuccess(JSONObject obj) {
                     Log.e("Res",obj.toString());
+                    mViewPager.setCurrentItem(2);
                     try {
                         String status = obj.getString("status");
                         if(status.equalsIgnoreCase("success")){
