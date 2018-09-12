@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">XADMobile</string>
+    <string name="app_name">XAD</string>
     <string name="title_activity_donate">Donate</string>
     <string name="tab_text_1">Assitive Device</string>
     <string name="tab_text_2">Work As Volunter</string>

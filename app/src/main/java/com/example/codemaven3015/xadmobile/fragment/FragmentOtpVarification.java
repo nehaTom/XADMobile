@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.codemaven3015.xadmobile.R;
 import com.example.codemaven3015.xadmobile.activity.Home;
+import com.example.codemaven3015.xadmobile.activity.Profile;
 
 public class FragmentOtpVarification extends android.support.v4.app.Fragment {
     View v;
@@ -39,7 +40,15 @@ public class FragmentOtpVarification extends android.support.v4.app.Fragment {
         StartedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(),Home.class);
+//                if (sharedPreferences.getBoolean("FIRST_LOGIN",false)) {
+//                    Intent i = new Intent(getContext(), Profile.class);
+//                    startActivity(i);
+//
+//                } else {
+//                    Intent i = new Intent(getContext(), Home.class);
+//                    startActivity(i);
+//                }
+                Intent i = new Intent(getContext(), Home.class);
                 startActivity(i);
             }
         });

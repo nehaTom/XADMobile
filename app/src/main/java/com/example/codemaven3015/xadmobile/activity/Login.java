@@ -112,6 +112,7 @@ public class Login extends AppCompatActivity {
         private static final String ARG_SECTION_NUMBER = "section_number";
         EditText et1, et2, et3, et4, phoneEditText,firstNameEditText,lastNameEditText;
         Button verfyButton,changePhoneButton,resendButton;
+      public  Boolean isFirstLogging=false;
 
         public PlaceholderFragment() {
         }
@@ -174,6 +175,7 @@ public class Login extends AppCompatActivity {
         private void callNext() {
             String url = "http://xadnew.quickbooksupport365.com/service/register.php";
             HashMap<String, String> params = new HashMap<>();
+
             params.put("register","1");
             params.put("mobile_no",phoneEditText.getText().toString());
             params.put("first_name",firstNameEditText.getText().toString());
@@ -191,11 +193,13 @@ public class Login extends AppCompatActivity {
                     try {
                         String status = obj.getString("status");
                         if(status.equalsIgnoreCase("success")){
+                            isFirstLogging=true;
                             editor.putString("PHONE",phoneEditText.getText().toString());
                             JSONObject objData = new JSONObject();
                             objData = obj.getJSONObject("data");
                             editor.putString("LAST_ID",objData.getString("last_insert_id"));
                             editor.putString("FIRST_NAME",firstNameEditText.getText().toString());
+                            editor.putBoolean("FIRST_LOGIN",isFirstLogging);
                             editor.commit();
                             mViewPager.setCurrentItem(1);
 
@@ -298,14 +302,24 @@ public class Login extends AppCompatActivity {
             params.put("otp","1234");
             params.put("last_inser_id",sharedPreferences.getString("LAST_ID",""));
             VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
+            progressDialog.show();
             volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
                 @Override
                 public void onSuccess(JSONObject obj) {
                     Log.e("Res",obj.toString());
-                    mViewPager.setCurrentItem(2);
+
+                    try {
+                        editor.putString("user_id",obj.getString("data"));
+                        editor.commit();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //   mViewPager.setCurrentItem(2);
                     try {
                         String status = obj.getString("status");
                         if(status.equalsIgnoreCase("success")){
+                            progressDialog.hide();
                             mViewPager.setCurrentItem(2);
 
                         }else{

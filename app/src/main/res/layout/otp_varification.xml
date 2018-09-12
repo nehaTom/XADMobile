@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textColor="@color/colorAccent"
+            android:padding="10dp"
             android:text="Update Profile"
             android:background="#ffffff"/>
     </RelativeLayout>

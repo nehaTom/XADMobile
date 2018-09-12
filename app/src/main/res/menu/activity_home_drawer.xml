@@ -5,33 +5,33 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/my_profile"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-    </group>
+            android:title="My Profile" />
+      </group>
 
-    <item android:title="Communicate">
+    <item android:title="Donar Panel">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/doner"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="Donate" />
+            <item
+                android:id="@+id/doner_view"
+                android:icon="@drawable/ic_menu_send"
+                android:title="View Status" />
+        </menu>
+    </item>
+    <item android:title="Reciver Panel">
+        <menu>
+            <item
+                android:id="@+id/recive"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Recieve" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="View Status" />
         </menu>
     </item>
 

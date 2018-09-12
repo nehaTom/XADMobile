@@ -1,6 +1,7 @@
 package com.example.codemaven3015.xadmobile.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,13 +26,14 @@ public class Profile extends AppCompatActivity {
     Button update;
     LinearLayout profile_View , profile_Edit;
     String flag;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         initWidgets();
-
+         sharedPreferences=getApplicationContext().getSharedPreferences("User_Info",MODE_PRIVATE);
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +59,8 @@ public class Profile extends AppCompatActivity {
         obj_value.put("first_name",fname.getText().toString());
         obj_value.put("last_name",lname.getText().toString());
         obj_value.put("email",emailId.getText().toString());
-     //   obj_value.put("mobile_no",contactNo.getText().toString());
+        obj_value.put("mobile_no",sharedPreferences.getString("PHONE",""));
+        // obj_value.put("mobile_no",contactNo.getText().toString());
         obj_value.put("adhar_no",adharNo.getText().toString());
         obj_value.put("address",address.getText().toString());
         obj_value.put("pan_no",panNo.getText().toString());

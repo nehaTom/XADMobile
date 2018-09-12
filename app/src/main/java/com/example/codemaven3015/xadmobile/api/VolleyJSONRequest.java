@@ -50,7 +50,7 @@ public class VolleyJSONRequest {
             public void onErrorResponse(VolleyError error)
             {
                 callback.onFailure(error);
-                Log.e("Check",error.getMessage());
+//                Log.e("Check",error.getMessage());
             }
         }){
             @Override

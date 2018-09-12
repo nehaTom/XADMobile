@@ -33,8 +33,8 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:text="Recive"
-            android:id="@+id/revive_btn"/>
+            android:text="Recieve"
+            android:id="@+id/recive_btn"/>
     </RelativeLayout>
     </RelativeLayout>
 
