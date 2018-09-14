@@ -65,6 +65,10 @@ public class Donate extends AppCompatActivity {
 
     static ArrayList<String> categoryName = new ArrayList<>();
     static ArrayList<String> centreName = new ArrayList<>();
+
+    static ArrayList<String> categoirId = new ArrayList<>();
+    static ArrayList<String> centreId = new ArrayList<>();
+
     public static  SharedPreferences sharedPreferences;
     public static  SharedPreferences.Editor editor;
 
@@ -129,19 +133,22 @@ public class Donate extends AppCompatActivity {
             @Override
             public void onSuccess(JSONObject obj) {
           //      progressDialog.hide();
-                Log.d("gjhgjh", obj.toString());
+              //  Log.d("gjhgjh", obj.toString());
 
                 try {
                     String status = obj.getString("status");
-                    Log.d("Value1", "" + status);
+                 //   Log.d("Value1", "" + status);
                     if (status.equalsIgnoreCase("success")) {
                         JSONArray jsonArray = obj.getJSONArray("data");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                            String center_id=jsonObject1.getString("id");
                             String country = jsonObject1.getString("center_name");
-                            Log.d("country", "country");
+                      //      Log.d("country", "country");
+                            centreId.add(center_id);
                             centreName.add(country);
-                            Log.d("country", country);
+                      //     Log.d("country", country);
                         }
 
                     } else {
@@ -200,20 +207,22 @@ public class Donate extends AppCompatActivity {
             @Override
             public void onSuccess(JSONObject obj) {
           //      progressDialog.hide();
-                Log.d("gjhgjh", obj.toString());
+              //  Log.d("gjhgjh", obj.toString());
 
                 try {
                     String status = obj.getString("status");
-                    Log.d("Value1", "" + status);
+                 //   Log.d("Value1", "" + status);
                     if (status.equalsIgnoreCase("success")) {
                         JSONObject values = obj.getJSONObject("data");
                         int count = values.length();
-                        Log.d("jhsgv", String.valueOf(count));
+                      //  Log.d("jhsgv", String.valueOf(count));
                         for (int i = 0; i < count-1; i++) {
                             JSONObject dxdd = values.getJSONObject(String.valueOf(i));
+                            String cat_id=dxdd.getString("id");
                             String cat_name = dxdd.getString("cat_name");
                             categoryName.add(cat_name);
-                            Log.d("ghsdj", cat_name);
+                            categoirId.add(cat_id);
+                      //      Log.d("ghsdj", cat_name);
 
                         }
 
@@ -292,6 +301,7 @@ public class Donate extends AppCompatActivity {
             category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(
                         AdapterView<?> parent, View view, int position, long id) {
+                    id= Long.parseLong(categoirId.get(position));
                     selection_item=parent.getItemAtPosition(position).toString();
                     id_device=id;
                     Toast.makeText(getContext(), "Spinner1: position=" + position + " id=" + id+"item :"+selection_item, Toast.LENGTH_SHORT).show();
@@ -309,6 +319,7 @@ public class Donate extends AppCompatActivity {
            nearest_center.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                @Override
                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                   id= Long.parseLong(centreId.get(position));
                    facilation_item=parent.getItemAtPosition(position).toString();
                    id_facilation=id;
                    Toast.makeText(getContext(),"facilation iteam position:"+facilation_item+"position :"+position+"id :"+id,Toast.LENGTH_SHORT).show();;
@@ -365,18 +376,18 @@ public class Donate extends AppCompatActivity {
 
                         try {
                             saveDevice();
-                     //       Intent intent = new Intent(getContext(), DonatedList.class);
-                     //       startActivity(intent);
+                            Intent intent = new Intent(getContext(), DonatedList.class);
+                            startActivity(intent);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Intent intent = new Intent(getContext(), DonatedList.class);
-                        startActivity(intent);
+
 
                     }
                 }
             });
+
             return rootView;
         }
 
@@ -416,6 +427,8 @@ public class Donate extends AppCompatActivity {
         }
 
         private void initWidgets(View rootView) {
+            device_condition=1;
+            mark_donate=1;
             category_spinner = rootView.findViewById(R.id.category_spinner);
 
             nearest_center = rootView.findViewById(R.id.nearest_center);
@@ -477,16 +490,16 @@ public class Donate extends AppCompatActivity {
             switch ((position)) {
                 case 0:
                     return PlaceholderFragment.newInstance(position + 1);
-
-                case 3:
-                    DonateMoney donateMoney = new DonateMoney();
-                    return donateMoney;
                 case 1:
                     WorkAsVolunter wrkasv = new WorkAsVolunter();
                     return wrkasv;
                 case 2:
                     SpaceForStorage spaceForStorage = new SpaceForStorage();
                     return spaceForStorage;
+                case 3:
+                    DonateMoney donateMoney = new DonateMoney();
+                    return donateMoney;
+
                 case 4:
                     DonateCSR donateCSR = new DonateCSR();
                     return donateCSR;

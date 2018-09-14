@@ -36,7 +36,7 @@ public class VolleyJSONRequest {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("Check",response);
+           //     Log.e("Check",response);
                 try {
                     JSONObject responseObject = new JSONObject(response);
                     callback.onSuccess(responseObject);
