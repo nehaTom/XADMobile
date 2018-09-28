@@ -3,12 +3,14 @@ package com.example.codemaven3015.xadmobile.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -44,7 +47,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 public class Home extends AppCompatActivity
-        implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener, NavigationView.OnNavigationItemSelectedListener {
+        implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener,NavigationView.OnNavigationItemSelectedListener {
 
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
@@ -57,6 +60,11 @@ public class Home extends AppCompatActivity
     String latitude,longitude;
     boolean gps_enabled,network_enabled;
     Button donate_btn,recive_btn;
+    boolean doubleBackToExitPressedOnce = false;
+    TextView textView;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     //-------------------
 
 
@@ -77,6 +85,8 @@ public class Home extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        sharedPreferences=this.getSharedPreferences("User_Info",MODE_PRIVATE);
+        editor=sharedPreferences.edit();
 //----------Button Click ------------------
         donate_btn=findViewById(R.id.donate_btn);
         recive_btn=findViewById(R.id.recive_btn);
@@ -94,9 +104,19 @@ public class Home extends AppCompatActivity
                 startActivity(intent);
             }
         });
+        // Construct a GeoDataClient.
+//        mGeoDataClient = Places.getGeoDataClient(this, null);
+//
+//        // Construct a PlaceDetectionClient.
+//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
+//
+//        // Construct a FusedLocationProviderClient.
+//        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 //---------------------Close Button Click------------------------------
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+//        textView=navigationView.getHeaderView(0).findViewById(R.id.textView);
+//        setUserName();
         //------------------
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -104,7 +124,13 @@ public class Home extends AppCompatActivity
         }catch(SecurityException e){
             e.printStackTrace();
         }
+
     }
+//    private void setUserName() {
+//
+//        //  user_name_appmenu.setText("");
+//        textView.setText(sharedPreferences.getString("FIRST_NAME",""));
+//    }
 
     @Override
     public void onBackPressed() {
@@ -112,8 +138,30 @@ public class Home extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+           // super.onBackPressed();
         }
+        if (doubleBackToExitPressedOnce) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+
+
     }
 
     @Override
@@ -131,9 +179,9 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -145,16 +193,26 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.my_profile) {
-            Toast.makeText(this,"This is in Profile ",Toast.LENGTH_LONG).show();
+//            Toast.makeText(this,"This is in Profile ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),ViewProfile.class);
+            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.doner) {
-            Toast.makeText(this,"This is in DOner ",Toast.LENGTH_LONG).show();
+          //  Toast.makeText(this,"This is in DOner ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),Donate.class);
+            startActivity(intent);
         } else if (id == R.id.doner_view) {
-            Toast.makeText(this,"This is in DonerView ",Toast.LENGTH_LONG).show();
+   //         Toast.makeText(this,"This is in DonerView ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),DonatedList.class);
+            startActivity(intent);
         } else if (id == R.id.recive) {
-            Toast.makeText(this,"This is in Recive ",Toast.LENGTH_LONG).show();
+    //        Toast.makeText(this,"This is in Recive ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),Request.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
-            Toast.makeText(this,"This is in ReciveView ",Toast.LENGTH_LONG).show();
+       //     Toast.makeText(this,"This is in ReciveView ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),RequestList.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -179,10 +237,10 @@ public class Home extends AppCompatActivity
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
-        //    Add a marker in Sydney and move the camera
-//        LatLng india = new LatLng(28.58, 77.30);
-//        mMap.addMarker(new MarkerOptions().position(india).title("Marker in india"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(india));
+ //           Add a marker in Sydney and move the camera
+        LatLng india = new LatLng(28.58, 77.30);
+       mMap.addMarker(new MarkerOptions().position(india).title("Marker in india"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(india));
     }
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -250,12 +308,3 @@ public class Home extends AppCompatActivity
 
     }
 }
-// in Oncreate
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });

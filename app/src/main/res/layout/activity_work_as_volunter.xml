@@ -6,16 +6,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
         android:layout_margin="20dp"
-        android:background="@drawable/border_square_pink">
+        android:layout_marginBottom="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
 
-          android:padding="10dp">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,61 +37,71 @@
                     android:text="Select Days"
                     android:textStyle="bold" />
 
-                <CheckBox
-                    android:id="@+id/checkbox_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select All" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <CheckBox
-                    android:id="@+id/checkbox_sun"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sunday" />
+                    <CheckBox
+                        android:id="@+id/checkbox_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select All" />
 
-                <CheckBox
-                    android:id="@+id/checkbox_mon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Monday" />
+                    <CheckBox
+                        android:id="@+id/checkbox_sun"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sunday" />
 
-                <CheckBox
-                    android:id="@+id/checkbox_tue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tuesday" />
+                    <CheckBox
+                        android:id="@+id/checkbox_mon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monday" />
+                </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    <CheckBox
+                        android:id="@+id/checkbox_tue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tuesday" />
 
-                <CheckBox
-                    android:id="@+id/checkbox_wed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Wednesday" />
+                    <CheckBox
+                        android:id="@+id/checkbox_wed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wednesday" />
 
-                <CheckBox
-                    android:id="@+id/checkbox_thu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Thursday" />
+                    <CheckBox
+                        android:id="@+id/checkbox_thu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thursday" />
+                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <CheckBox
+                        android:id="@+id/checkbox_fri"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="friday" />
 
-                <CheckBox
-                    android:id="@+id/checkbox_fri"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="friday" />
-
-                <CheckBox
-                    android:id="@+id/checkbox_sat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Saturday" />
+                    <CheckBox
+                        android:id="@+id/checkbox_sat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Saturday" />
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,21 +113,19 @@
                     android:id="@+id/et_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:background="@drawable/border_square"
                     android:hint="Enter hours"
                     android:inputType="number"
-                    android:layout_marginLeft="5dp"
-
-                    android:padding="5dp"
-                     />
+                    android:padding="5dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -156,13 +163,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mobile No"
+                    android:text="Mobile Number"
                     android:textStyle="bold" />
 
                 <EditText
@@ -170,18 +175,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:background="@drawable/border_square"
-                    android:hint="2345678909"
+                    android:hint="Mobile Number"
                     android:inputType="number"
-                    android:padding="5dp"
-                    android:maxLength="10" />
+                    android:maxLength="10"
+                    android:padding="5dp" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/Submit"
                 android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
+                android:background="@color/colorMenu"
+                android:textColor="@color/colorWhite"
                 android:text="Submit" />
         </LinearLayout>
     </ScrollView>

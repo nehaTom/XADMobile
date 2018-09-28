@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/my_profile"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/profile"
             android:title="My Profile" />
       </group>
 
@@ -14,24 +14,24 @@
         <menu>
             <item
                 android:id="@+id/doner"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/dont"
                 android:title="Donate" />
             <item
                 android:id="@+id/doner_view"
-                android:icon="@drawable/ic_menu_send"
-                android:title="View Status" />
+                android:icon="@drawable/donatelist"
+                android:title="Donate List" />
         </menu>
     </item>
     <item android:title="Reciver Panel">
         <menu>
             <item
                 android:id="@+id/recive"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Recieve" />
+                android:icon="@drawable/request"
+                android:title="Request" />
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="View Status" />
+                android:icon="@drawable/requestlist"
+                android:title="Request List" />
         </menu>
     </item>
 

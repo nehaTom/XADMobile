@@ -6,168 +6,230 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/border_square_pink"
-        android:layout_margin="30dp"
-        android:padding="20dp">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:layout_centerHorizontal="true">
-    <TextView
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_marginRight="10dp"
-        android:textAlignment="textEnd"
-        android:textStyle="bold"
-        android:text="First Name : "/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="5dp"
-        android:id="@+id/fname"
-        android:text="Abcdfeg "/>
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="20dp">
 
-</LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="textStart"
+            android:background="@color/colorWhite"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:padding="5dp"
+                android:text="First Name"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/fname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Abcdfeg " />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="textStart"
+
             android:layout_marginTop="50dp"
-            android:layout_centerHorizontal="true">
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textStyle="bold"
                 android:layout_marginRight="10dp"
-                android:textAlignment="textEnd"
-                android:text="Last Name : "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
                 android:padding="5dp"
+                android:text="Last Name"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/lname"
-                android:text="Abcdfeg "/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Abcdfeg " />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="textStart"
             android:layout_marginTop="100dp"
-            android:layout_centerHorizontal="true">
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:layout_marginRight="10dp"
-                android:textAlignment="textEnd"
-                android:textStyle="bold"
-                android:text="Email : "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
                 android:padding="5dp"
+                android:text="Email"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/email"
-                android:text="abc@gmail.com "/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="abc@gmail.com " />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:textAlignment="textStart"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="150dp"
-            android:layout_centerHorizontal="true">
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textStyle="bold"
-
                 android:layout_marginRight="10dp"
-                android:textAlignment="textEnd"
-                android:text="Contact No : "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
                 android:padding="5dp"
+                android:text="Contact No"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/phoneNo"
-                android:text="8765432456 "/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="8765432456 " />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="textStart"
             android:layout_marginTop="200dp"
-            android:layout_centerHorizontal="true">
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:layout_marginRight="10dp"
-                android:textAlignment="textEnd"
-                android:textStyle="bold"
-                android:text="Gender : "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
                 android:padding="5dp"
+                android:text="Gender"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/gender"
-                android:text="Male"/>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginTop="250dp"
-            android:layout_centerHorizontal="true">
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:layout_marginRight="10dp"
-                android:textStyle="bold"
-                android:textAlignment="textEnd"
-                android:text="Adhar No : "/>
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
-                android:id="@+id/adharNo"
-                android:text="234567890213"/>
+                android:text="Male" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginTop="300dp"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:textAlignment="textStart"
+            android:layout_marginTop="250dp"
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textStyle="bold"
                 android:layout_marginRight="10dp"
-                android:textAlignment="textEnd"
-                android:text="Address : "/>
+                android:padding="5dp"
+                android:text="Adhar No"
+                android:textStyle="bold" />
+
             <TextView
+                android:id="@+id/adharNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="234567890213" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="textStart"
+            android:layout_marginTop="300dp"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:padding="5dp"
+                android:text="Pan No"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/panNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="BJMR2345AO" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="350dp"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:padding="5dp"
+                android:text="Address"
+                android:textAlignment="textStart"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:id="@+id/address"
-                android:text="B19 codemaven sector 2 noida"/>
+                android:text="B19 codemaven sector 2 noida" />
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="400dp"
+           >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorMenu"
+            android:textColor="@color/colorWhite"
+            android:text="update Profile"/>
         </LinearLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

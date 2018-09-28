@@ -59,7 +59,7 @@
         android:layout_height="45dp"
         android:textColor="#ffffff"
         android:text="VERIFY OTP"
-        android:background="@color/colorAccent"/>
+        android:background="@color/colorMenu"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="#ffffff"
                 android:text="Change Phone No."
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorMenu" />
 
             <Button
                 android:id="@+id/resendButton"
@@ -88,7 +88,7 @@
                 android:layout_marginTop="195dp"
                 android:background="#ffffff"
                 android:text="Resend Otp"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorMenu" />
         </RelativeLayout>
 
 

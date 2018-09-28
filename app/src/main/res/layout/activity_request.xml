@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="50dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.Request">
@@ -10,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
-        android:background="@drawable/border_square_pink"
         android:paddingBottom="40dp">
 
         <LinearLayout
@@ -21,15 +21,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical"
-                android:padding="10dp">
+
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="10dp"
+                   android:textStyle="bold"
                     android:text="Select Category" />
 
                 <LinearLayout
@@ -51,22 +52,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="Device Title/ Name" />
-
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
                 <EditText
                     android:id="@+id/device_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
                     android:hint="Device Title"
                     android:inputType="text"
@@ -76,16 +69,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:text="Patient Condition" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
 
                 <EditText
                     android:id="@+id/message"
@@ -93,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
-                    android:hint="Is there anything you want to tell us?"
+                    android:hint="Patient Condition"
                     android:inputType="textMultiLine"
                     android:padding="10dp" />
             </LinearLayout>
@@ -101,21 +87,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="10dp"
+                    android:textStyle="bold"
                     android:text="Nearest Facilation Center" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
                     android:padding="10dp">
 
@@ -127,19 +112,37 @@
                     </Spinner>
                 </LinearLayout>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_square"
+                    android:hint="description "
+                    android:inputType="textMultiLine"
+                    android:padding="10dp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                 android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:padding="10dp"
                     android:text="Upload Doctors prescription" />
 
                 <LinearLayout
@@ -147,8 +150,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/border_square"
-                    android:padding="10dp">
+                    android:background="@drawable/border_square">
 
                     <ImageView
                         android:id="@+id/imv"
@@ -161,16 +163,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
 
                 <Button
                     android:id="@+id/button"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
                     android:layout_gravity="center"
-                    android:padding="10dp"
+                    android:background="@color/colorMenu"
+                    android:textColor="@color/colorWhite"
                     android:text="Submit" />
             </LinearLayout>
 

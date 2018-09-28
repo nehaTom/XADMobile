@@ -3,9 +3,17 @@ package com.example.codemaven3015.xadmobile.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -14,6 +22,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +45,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.codemaven3015.xadmobile.Constant.Constant;
 import com.example.codemaven3015.xadmobile.R;
 import com.example.codemaven3015.xadmobile.api.VolleyJSONRequest;
 import com.example.codemaven3015.xadmobile.fragment.DonateCSR;
@@ -47,10 +57,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Donate extends AppCompatActivity {
+public class Donate extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -65,7 +77,6 @@ public class Donate extends AppCompatActivity {
 
     static ArrayList<String> categoryName = new ArrayList<>();
     static ArrayList<String> centreName = new ArrayList<>();
-
     static ArrayList<String> categoirId = new ArrayList<>();
     static ArrayList<String> centreId = new ArrayList<>();
 
@@ -76,14 +87,32 @@ public class Donate extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_donate);
+        setContentView(R.layout.activity_donate_drawer);
+        categoryName.clear();
+        centreName.clear();
 
+        loadSpinnerData();
+        loadSpinnerData1();
+
+        //-----------------------------
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+//        textView=navigationView.getHeaderView(0).findViewById(R.id.textView);
+//        setUserName();
+
+        //----------------------------
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -112,10 +141,7 @@ public class Donate extends AppCompatActivity {
 
         sharedPreferences=this.getSharedPreferences("User_Info",MODE_PRIVATE);
         editor=sharedPreferences.edit();
-
-
-        loadSpinnerData();
-        loadSpinnerData1();
+       // Toast.makeText(Donate.this,""+categoryName.size(),Toast.LENGTH_SHORT).show();
 
         //  progressDialog.show();
 
@@ -123,21 +149,25 @@ public class Donate extends AppCompatActivity {
 
     }
 
+
+    //----------ApiCalling and ProgressBAr----------------
+
     private void loadSpinnerData1() {
-        String URL = "http://xadnew.quickbooksupport365.com/service/donationCenter.php";
+       // String URL = "http://xadnew.quickbooksupport365.com/service/donationCenter.php";
+        String URL = Constant.BaseURL+"donationCenter.php";
         HashMap<String, String> params1 = new HashMap<>();
         params1.put("center", "1");
         VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getApplicationContext(), URL, params1);
-     //  progressDialog.show();
+        //  progressDialog.show();
         volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
             @Override
             public void onSuccess(JSONObject obj) {
-          //      progressDialog.hide();
-              //  Log.d("gjhgjh", obj.toString());
+                //      progressDialog.hide();
+                //  Log.d("gjhgjh", obj.toString());
 
                 try {
                     String status = obj.getString("status");
-                 //   Log.d("Value1", "" + status);
+                    //   Log.d("Value1", "" + status);
                     if (status.equalsIgnoreCase("success")) {
                         JSONArray jsonArray = obj.getJSONArray("data");
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -145,16 +175,16 @@ public class Donate extends AppCompatActivity {
 
                             String center_id=jsonObject1.getString("id");
                             String country = jsonObject1.getString("center_name");
-                      //      Log.d("country", "country");
+                            //      Log.d("country", "country");
                             centreId.add(center_id);
                             centreName.add(country);
-                      //     Log.d("country", country);
+                            //     Log.d("country", country);
                         }
 
                     } else {
                         String msg = obj.getString("message");
-                        Toast.makeText(getApplicationContext(), msg,
-                                Toast.LENGTH_LONG).show();
+                         Toast.makeText(getApplicationContext(), msg,
+                              Toast.LENGTH_LONG).show();
 
                     }
                 } catch (JSONException e) {
@@ -165,7 +195,7 @@ public class Donate extends AppCompatActivity {
 
             @Override
             public void onFailure(VolleyError error) {
-                progressDialog.hide();
+                // progressDialog.hide();
 
             }
         });
@@ -173,11 +203,81 @@ public class Donate extends AppCompatActivity {
 
     }
 
+//    private void setUserName() {
+//
+//        //  user_name_appmenu.setText("");
+//        textView.setText(sharedPreferences.getString("FIRST_NAME",""));
+//    }
+
+    private  void loadSpinnerData() {
+  //      String URL = "http://xadnew.quickbooksupport365.com/service/category.php";
+        String URL = Constant.BaseURL+"category.php";
+        HashMap<String, String> params = new HashMap<>();
+        params.put("category", "1");
+        VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getApplicationContext(), URL, params);
+        //  progressDialog.show();
+        volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+            @Override
+            public void onSuccess(JSONObject obj) {
+                categoryName.clear();
+                //      progressDialog.hide();
+                //  Log.d("gjhgjh", obj.toString());
+
+                try {
+                    String status = obj.getString("status");
+                    //   Log.d("Value1", "" + status);
+                    if (status.equalsIgnoreCase("success")) {
+                        JSONObject values = obj.getJSONObject("data");
+                        int count = values.length();
+                        //  Log.d("jhsgv", String.valueOf(count));
+                        for (int i = 0; i < count-1; i++) {
+                            JSONObject dxdd = values.getJSONObject(String.valueOf(i));
+                            String cat_id=dxdd.getString("id");
+                            String cat_name = dxdd.getString("cat_name");
+                            categoryName.add(cat_name);
+                            categoirId.add(cat_id);
+                            int dgcc = categoryName.size();
+                            Log.d("ghsdj", String.valueOf(dgcc));
+
+                        }
+
+
+                    } else {
+                        String msg = obj.getString("message");
+                        // Toast.makeText(getApplicationContext(), msg,
+                        //     Toast.LENGTH_LONG).show();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(VolleyError error) {
+                // progressDialog.hide();
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_donate, menu);
+        getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
@@ -189,65 +289,47 @@ public class Donate extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
-    //----------ApiCalling and ProgressBAr----------------
 
-    private void loadSpinnerData() {
-        String URL = "http://xadnew.quickbooksupport365.com/service/category.php";
-        HashMap<String, String> params = new HashMap<>();
-        params.put("category", "1");
-        VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getApplicationContext(), URL, params);
-      //  progressDialog.show();
-        volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
-            @Override
-            public void onSuccess(JSONObject obj) {
-          //      progressDialog.hide();
-              //  Log.d("gjhgjh", obj.toString());
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-                try {
-                    String status = obj.getString("status");
-                 //   Log.d("Value1", "" + status);
-                    if (status.equalsIgnoreCase("success")) {
-                        JSONObject values = obj.getJSONObject("data");
-                        int count = values.length();
-                      //  Log.d("jhsgv", String.valueOf(count));
-                        for (int i = 0; i < count-1; i++) {
-                            JSONObject dxdd = values.getJSONObject(String.valueOf(i));
-                            String cat_id=dxdd.getString("id");
-                            String cat_name = dxdd.getString("cat_name");
-                            categoryName.add(cat_name);
-                            categoirId.add(cat_id);
-                      //      Log.d("ghsdj", cat_name);
+        if (id == R.id.my_profile) {
+//            Toast.makeText(this,"This is in Profile ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),ViewProfile.class);
+            startActivity(intent);
+            // Handle the camera action
+        } else if (id == R.id.doner) {
+            //  Toast.makeText(this,"This is in DOner ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),Donate.class);
+            startActivity(intent);
+        } else if (id == R.id.doner_view) {
+            //         Toast.makeText(this,"This is in DonerView ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),DonatedList.class);
+            startActivity(intent);
+        } else if (id == R.id.recive) {
+            //        Toast.makeText(this,"This is in Recive ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),Request.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_send) {
+            //     Toast.makeText(this,"This is in ReciveView ",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(getApplicationContext(),RequestList.class);
+            startActivity(intent);
+        }
 
-                        }
-
-
-                    } else {
-                        String msg = obj.getString("message");
-                        Toast.makeText(getApplicationContext(), msg,
-                                Toast.LENGTH_LONG).show();
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(VolleyError error) {
-                progressDialog.hide();
-
-            }
-        });
-
-
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
+
 
     // --------------------------------------
 
@@ -268,6 +350,8 @@ public class Donate extends AppCompatActivity {
         String selection_item,facilation_item;
         Long id_device,id_facilation;
         int device_condition,mark_donate;
+        private static int PICK_IMAGE_REQUEST  = 1;
+        String imageToupload;
 
 
 
@@ -294,17 +378,37 @@ public class Donate extends AppCompatActivity {
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             initWidgets(rootView);
 
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, categoryName);
-            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            category_spinner.setAdapter(arrayAdapter);
 
+            String [] values =
+                    {"Time at Residence","Under 6 months","6-12 months","1-2 years","2-4 years","4-8 years","8-15 years","Over 15 years",};
+
+
+           final ArrayAdapter<String>  arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categoryName);
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+          //  arrayAdapter.notifyDataSetChanged();
+
+            category_spinner.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    category_spinner.setAdapter(arrayAdapter);
+                }
+            }, 1000);
+
+
+          //  category_spinner.setSelection(0,false);
+            arrayAdapter.notifyDataSetChanged();
+//            category_spinner.post(new Runnable() {
+//                public void run() {
+//                    category_spinner.setSelection(1);
+//                }
+//            });
             category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(
-                        AdapterView<?> parent, View view, int position, long id) {
+                        AdapterView<?> arg0, View view, int position, long id) {
                     id= Long.parseLong(categoirId.get(position));
-                    selection_item=parent.getItemAtPosition(position).toString();
+                    selection_item=category_spinner.getItemAtPosition(position).toString();
                     id_device=id;
-                    Toast.makeText(getContext(), "Spinner1: position=" + position + " id=" + id+"item :"+selection_item, Toast.LENGTH_SHORT).show();
+           //         Toast.makeText(getContext(), "Spinner1: position=" + position + " id=" + id+"item :"+selection_item, Toast.LENGTH_SHORT).show();
                 }
 
                 public void onNothingSelected(AdapterView<?> parent) {
@@ -312,24 +416,35 @@ public class Donate extends AppCompatActivity {
                 }
             });
 
-            ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, centreName);
+           final ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, centreName);
             arrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             nearest_center.setAdapter(arrayAdapter1);
 
+            nearest_center.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    nearest_center.setAdapter(arrayAdapter1);
+                }
+            }, 1000);
+
+
+            //     nearest_center.setSelection(1,true);
+
            nearest_center.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-               @Override
-               public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                   id= Long.parseLong(centreId.get(position));
-                   facilation_item=parent.getItemAtPosition(position).toString();
-                   id_facilation=id;
-                   Toast.makeText(getContext(),"facilation iteam position:"+facilation_item+"position :"+position+"id :"+id,Toast.LENGTH_SHORT).show();;
-               }
+                @Override
+                public void onItemSelected(AdapterView<?> arg1, View view, int position, long id) {
+                    id= Long.parseLong(centreId.get(position));
+                    facilation_item=arg1.getItemAtPosition(position).toString();
+                    id_facilation=id;
 
-               @Override
-               public void onNothingSelected(AdapterView<?> parent) {
+                    //    Toast.makeText(getContext(),"facilation iteam position:"+facilation_item+"position :"+position+"id :"+id,Toast.LENGTH_SHORT).show();;
+                }
 
-               }
-           });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             working_statusRG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
             {
@@ -337,12 +452,11 @@ public class Donate extends AppCompatActivity {
                     switch(checkedId){
                         case R.id.working:
                             device_condition=1;
-                            Toast.makeText(getContext(),"Working",Toast.LENGTH_SHORT).show();
                             // do operations specific to this selection
                             break;
                         case R.id.not_working:
                             device_condition=0;
-                            Toast.makeText(getContext(),"Not Working",Toast.LENGTH_SHORT).show();
+
                             // do operations specific to this selection
                             break;
                     }
@@ -355,16 +469,23 @@ public class Donate extends AppCompatActivity {
                     switch(checkedId){
                         case R.id.yes:
                             mark_donate=1;
-                            Toast.makeText(getContext(),"yes",Toast.LENGTH_SHORT).show();
+                         //   Toast.makeText(getContext(),"yes",Toast.LENGTH_SHORT).show();
                             // do operations specific to this selection
                             break;
                         case R.id.no:
                             mark_donate=0;
 
-                            Toast.makeText(getContext(),"no",Toast.LENGTH_SHORT).show();
+                         //   Toast.makeText(getContext(),"no",Toast.LENGTH_SHORT).show();
                             // do operations specific to this selection
                             break;
                     }
+                }
+            });
+
+            deviceImagView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   setImageOfDevice();
                 }
             });
 
@@ -391,31 +512,78 @@ public class Donate extends AppCompatActivity {
             return rootView;
         }
 
+        private void setImageOfDevice() {
+
+            Intent pickImageIntent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageIntent.setType("image/*");
+            pickImageIntent.putExtra("aspectX", 1);
+            pickImageIntent.putExtra("aspectY", 1);
+            pickImageIntent.putExtra("scale", true);
+            pickImageIntent.putExtra("outputFormat",
+                    Bitmap.CompressFormat.JPEG.toString());
+            startActivityForResult(pickImageIntent, PICK_IMAGE_REQUEST);
+        }
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                Uri filePath = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
+                    Bitmap lastBitmap = null;
+                    lastBitmap = bitmap;
+                    //encoding image to string
+                    deviceImagView.setImageBitmap(lastBitmap);
+                     imageToupload = getStringImage(lastBitmap);
+Log.e("image_decode",imageToupload);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        private String getStringImage(Bitmap lastBitmap) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            lastBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            String encodedImage = Base64.encodeToString(imageBytes,  Base64.NO_PADDING );
+            return encodedImage;
+        }
+
         private void saveDevice() throws JSONException {
-            String url="http://xadnew.quickbooksupport365.com/service/devices.php";
+       //     String url="http://xadnew.quickbooksupport365.com/service/devices.php";
+            String url = Constant.BaseURL+"devices.php";
             HashMap<String,String>parms=new HashMap<>();
             parms.put("user_id",sharedPreferences.getString("user_id",""));
             parms.put("add","1");
             JSONObject obj_data=new JSONObject();
             obj_data.put("category_id",id_device);
+            Long i=id_device;
             obj_data.put("donation_center_id",id_facilation);
+            Long j=id_device;
             obj_data.put("device_name",deviceNameEditText.getText().toString());
             obj_data.put("remarks",remarkEditText.getText().toString());
             obj_data.put("working_status",device_condition);
             obj_data.put("mark_donate",mark_donate);
             obj_data.put("description",DeviceDescripEditText.getText().toString());
             JSONArray jsonArray=new JSONArray();
-            jsonArray.put(1);
-            jsonArray.put(2);
+          // imageToupload=imageToupload;
+           jsonArray.put(imageToupload);
+           //image[0]=imageToupload;
+            Log.e("Image",""+imageToupload);
+            //jsonArray.put(2);
             obj_data.put("images",jsonArray);
-            parms.put("responsedata",obj_data.toString());
-            Toast.makeText(getContext(),"JsonArray"+jsonArray+" obj Data"+obj_data,Toast.LENGTH_LONG).show();
+            parms.put("responsedata",obj_data.toString().replace("\\",""));
+            Log.e("obj_data",""+obj_data.toString());
+
+            //   Toast.makeText(getContext(),"JsonArray"+jsonArray+" obj Data"+obj_data,Toast.LENGTH_LONG).show();
             VolleyJSONRequest volleyJSONRequest=new VolleyJSONRequest(getContext(),url,parms);
             volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
                 @Override
                 public void onSuccess(JSONObject obj) {
 
-                    Toast.makeText(getContext(),""+obj,Toast.LENGTH_LONG);
+                   Toast.makeText(getContext(),""+obj,Toast.LENGTH_LONG);
 
                 }
 
@@ -471,6 +639,8 @@ public class Donate extends AppCompatActivity {
             }
             return true;
         }
+
+
     }
 
     /**

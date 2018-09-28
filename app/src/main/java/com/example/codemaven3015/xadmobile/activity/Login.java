@@ -2,6 +2,7 @@ package com.example.codemaven3015.xadmobile.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,14 +25,25 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.codemaven3015.xadmobile.Constant.Constant;
 import com.example.codemaven3015.xadmobile.R;
 import com.example.codemaven3015.xadmobile.api.VolleyJSONRequest;
 import com.example.codemaven3015.xadmobile.fragment.FragmentOtpVarification;
 import com.example.codemaven3015.xadmobile.helper.GenericTextWatcher;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class Login extends AppCompatActivity {
@@ -53,6 +65,7 @@ public class Login extends AppCompatActivity {
     public static SharedPreferences sharedPreferences;
     public static SharedPreferences.Editor editor;
     static ProgressDialog progressDialog;
+    public static int otpVerifyFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +76,7 @@ public class Login extends AppCompatActivity {
         setSupportActionBar(toolbar);
         sharedPreferences = this.getSharedPreferences("User_Info", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        otpVerifyFlag=0;
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -94,9 +108,9 @@ public class Login extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -112,6 +126,8 @@ public class Login extends AppCompatActivity {
         private static final String ARG_SECTION_NUMBER = "section_number";
         EditText et1, et2, et3, et4, phoneEditText,firstNameEditText,lastNameEditText;
         Button verfyButton,changePhoneButton,resendButton;
+        LoginButton login_button;
+        CallbackManager callbackManager;
       public  Boolean isFirstLogging=false;
 
         public PlaceholderFragment() {
@@ -141,20 +157,114 @@ public class Login extends AppCompatActivity {
                 firstNameEditText=rootView.findViewById(R.id.name_editText);
                 lastNameEditText=rootView.findViewById(R.id.nameLast_editText);
                 phoneEditText = rootView.findViewById(R.id.login_editText);
+                login_button=rootView.findViewById(R.id.login_button);
+              //  callbackManager=CallbackManager.Factory.create();
+                    facebookLogin();
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(inputValidation()) {
-                            callNext();
+                        if(inputValidationOfLogin()){
+                            loginApiCall();  //
                         }
+//                        if(inputValidation()) {
+//
+//                            callNext();   //here we calling the api of registration
+//                        }
                     }
                 });
+
             } else {
                 rootView = inflater.inflate(R.layout.fragment_otp, container, false);
                 setWidgets(rootView);
             }
             return rootView;
         }
+
+        private void facebookLogin() {
+                callbackManager = CallbackManager.Factory.create();
+                login_button.setReadPermissions("email");
+                login_button.setFragment(this);
+                login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.e("Facebook_Success", loginResult.toString());
+                        //getUserDetails(loginResult);
+                        String Token = loginResult.getAccessToken().getToken();
+                        String facebookAccessToken = Token;
+                        Intent intent=new Intent(getContext(),Home.class);
+                        startActivity(intent);
+
+
+
+                    }
+
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        Log.e("Facebook_Error", exception.getMessage());
+                    }
+                });
+            }
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+
+        protected void getUserDetails(LoginResult loginResult) {
+            GraphRequest data_request = GraphRequest.newMeRequest(
+                    loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(
+                                JSONObject json_object,
+                                GraphResponse response) {
+                            Intent intent = new Intent(getActivity(), Profile.class);
+                            intent.putExtra("userProfile", json_object.toString());
+                            startActivity(intent);
+                        }
+
+                    });
+            Bundle permission_param = new Bundle();
+            permission_param.putString("fields", "id,name,email,picture.width(120).height(120)");
+            data_request.setParameters(permission_param);
+            data_request.executeAsync();
+
+        }
+
+        public void onResume() {
+            super.onResume();
+            // Logs 'install' and 'app activate' App Events.
+            AppEventsLogger.activateApp(getActivity());
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            // Logs 'app deactivate' App Event.
+            AppEventsLogger.deactivateApp(getActivity());
+        }
+
+
+
+        //--------Method for Validition for Login In App---------------------------
+        private boolean inputValidationOfLogin(){
+            if(phoneEditText.getText().length()<10){
+                phoneEditText.setError("Invalid phone number");
+                return false;
+            }else if(phoneEditText.getText().toString().trim().isEmpty()){
+                phoneEditText.setError("Enter phone number");
+                return false;
+            }
+            return true;
+        }
+        //--------Method for Validition for Registration In App---------------------------
+
         private boolean inputValidation(){
             if(phoneEditText.getText().length()<10){
                 phoneEditText.setError("Invalid phone number");
@@ -172,8 +282,63 @@ public class Login extends AppCompatActivity {
             }
             return true;
         }
+        private void loginApiCall(){
+            String url=Constant.BaseURL+"login.php";  //Url of Api
+            HashMap<String,String>parms=new HashMap<>();
+
+            parms.put("login","1");        //flag
+            parms.put("mobile_no",phoneEditText.getText().toString());  //Mobile No
+
+            VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,parms);
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setMessage("Sending OTP");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+
+            volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+                @Override
+                public void onSuccess(JSONObject obj) {
+                    progressDialog.hide();
+                    String status = null;
+                    try {
+                        status = obj.getString("status");
+                        if (status.equalsIgnoreCase("success")) {
+                            JSONObject objData = new JSONObject();
+                            objData = obj.getJSONObject("data");
+
+                            editor.putString("PHONE",phoneEditText.getText().toString());
+                            editor.putString("LAST_ID",objData.getString("last_insert_id"));
+                            editor.commit();
+                            otpVerifyFlag=1;
+                            mViewPager.setCurrentItem(1);
+
+                        }else{
+                            String msg=obj.getString("message");
+                            if(inputValidation()) {
+                                   callNext();   //here we calling the api of registration
+                        }
+//                            Toast.makeText(getContext(),msg,
+//                                    Toast.LENGTH_LONG).show();
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(VolleyError error) {
+
+                }
+            });
+        }
+        //-----------------------Api calling  for Registration-------------------
         private void callNext() {
-            String url = "http://xadnew.quickbooksupport365.com/service/register.php";
+         //   String url = "http://xadnew.quickbooksupport365.com/service/register.php";
+           // String url = Constant.OldURL+"register.php";
+            String url = Constant.registrationURL;
             HashMap<String, String> params = new HashMap<>();
 
             params.put("register","1");
@@ -199,6 +364,7 @@ public class Login extends AppCompatActivity {
                             objData = obj.getJSONObject("data");
                             editor.putString("LAST_ID",objData.getString("last_insert_id"));
                             editor.putString("FIRST_NAME",firstNameEditText.getText().toString());
+                            editor.putString("LAST_NAME",lastNameEditText.getText().toString());
                             editor.putBoolean("FIRST_LOGIN",isFirstLogging);
                             editor.commit();
                             mViewPager.setCurrentItem(1);
@@ -270,7 +436,12 @@ public class Login extends AppCompatActivity {
             verfyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    verfyOTP();
+                    if(otpVerifyFlag==1) {
+                       verfyOTPLogin();
+                    }
+                    else{
+                        verfyOTP();
+                    }
                 }
             });
 
@@ -292,15 +463,89 @@ public class Login extends AppCompatActivity {
         private void changeNumber() {
             mViewPager.setCurrentItem(0);
         }
+        private void verfyOTPLogin() {
+            String url = Constant.loginURL;
+            HashMap<String, String> params = new HashMap<>();
+            params.put("varify","1");
+            params.put("mobile_no",sharedPreferences.getString("PHONE",""));
+            Log.d("hii1",""+sharedPreferences.getString("PHONE",""));
+            params.put("otp","1234");
+            String str=sharedPreferences.getString("LAST_ID","");
+            Log.d("Hiiii",""+str.toString());
+          //  Toast.makeText(getActivity(), "Hiii"+str, Toast.LENGTH_SHORT).show();
+            params.put("last_inser_id",str);
 
-        private void verfyOTP() {
+            VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
+            progressDialog.show();
+            volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+                @Override
+                public void onSuccess(JSONObject obj) {
+                    Log.e("Res",obj.toString());
+                    isFirstLogging=true;
+//                    try {
+//                        editor.putString("user_id",obj.getString("id"));
+//                        editor.putString("FIRST_NAME",obj.getString("first_name"));
+//                        editor.putString("LAST_NAME",obj.getString("last_name"));
+//                        editor.putBoolean("FIRST_LOGIN",isFirstLogging);
+//                        editor.commit();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
 
-            String url = "http://xadnew.quickbooksupport365.com/service/register.php";
+                    //   mViewPager.setCurrentItem(2);
+                    try {
+                        String status = obj.getString("status");
+                        if(status.equalsIgnoreCase("success")){
+                            progressDialog.hide();
+                            JSONObject obj1=obj.getJSONObject("data");
+                            editor.putString("user_id",obj1.getString("id"));
+                            String s=obj1.getString("id");
+                            editor.putString("FIRST_NAME",obj1.getString("first_name"));
+                            String s1=obj1.getString("first_name");
+                            editor.putString("LAST_NAME",obj1.getString("last_name"));
+                            String s2=obj1.getString("last_name");
+                            editor.putBoolean("FIRST_LOGIN",isFirstLogging);
+                            editor.commit();
+//                            mViewPager.setCurrentItem(2);
+                            Intent intent=new Intent(getActivity(),Home.class);
+                            startActivity(intent);
+                             getActivity().finish();
+                        }else{
+                            String msg=obj.getString("message");
+                            Toast.makeText(getContext(),msg,
+                                    Toast.LENGTH_LONG).show();
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(VolleyError error) {
+                    Toast.makeText(getContext(),error.getMessage().toString(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+
+            //mViewPager.setCurrentItem(2);
+        }
+
+
+        private void verfyOTP()     {
+
+          //  String url = "http://xadnew.quickbooksupport365.com/service/register.php";
+           // String url = Constant.OldURL+"register.php";
+            String url = Constant.registrationURL;
             HashMap<String, String> params = new HashMap<>();
             params.put("varify","1");
             params.put("mobile_no",sharedPreferences.getString("PHONE",""));
             params.put("otp","1234");
-            params.put("last_inser_id",sharedPreferences.getString("LAST_ID",""));
+            String str=sharedPreferences.getString("LAST_ID","");
+            Log.d("Hiiii",""+str.toString());
+     //       Toast.makeText(getActivity(), "Hiii"+str, Toast.LENGTH_SHORT).show();
+            params.put("last_inser_id",str);
+
             VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
             progressDialog.show();
             volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {

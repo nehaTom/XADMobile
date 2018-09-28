@@ -10,23 +10,13 @@
         android:id="@+id/profile_Edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <include
 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/profile_edit" />
+        <include
+
+            layout="@layout/profile_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/profile_View"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <include
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/profile_view" />
-    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

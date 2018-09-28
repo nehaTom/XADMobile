@@ -8,8 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        card_view:cardBackgroundColor="#ABB2FF"
-        card_view:cardCornerRadius="16dp"
+        card_view:cardBackgroundColor="#FFFFFF"
         card_view:cardElevation="5dp"
         card_view:contentPadding="4dp"
         >
@@ -31,17 +30,21 @@
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_weight="2"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/title_tv"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="DeviceTitle"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
                     android:layout_weight="1"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="Details"
+                    android:textSize="15dp"
                     android:id="@+id/details_tv"
                     android:layout_weight="1"/>
                 <RelativeLayout
@@ -52,13 +55,17 @@
                         android:id="@+id/status_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
                         android:text="Status"/>
                 <Button
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/statusChange_btn"
-                    android:text="Status Change"
+                    android:text="Donated"
+                    android:textColor="#FFFFFF"
+                    android:background="#42AB9E"
                     android:padding="9dp"/>
                 </RelativeLayout>
 

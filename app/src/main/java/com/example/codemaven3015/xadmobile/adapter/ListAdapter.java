@@ -1,7 +1,10 @@
 package com.example.codemaven3015.xadmobile.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.codemaven3015.xadmobile.Constant.Constant;
 import com.example.codemaven3015.xadmobile.Model.DonateModel;
 import com.example.codemaven3015.xadmobile.R;
 
@@ -21,6 +26,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     Context context;
     String[] listDevises = {"Device1", "Devices2", "Devices3"};
     private ArrayList<DonateModel> donateList;
+    int flag=0;
 
     public ListAdapter(Context context,ArrayList<DonateModel>donateList) {
         this.context = context;
@@ -41,13 +47,72 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, final int position) {
         DonateModel donateModel=donateList.get(position);
       //  holder.title_tv.setText(listDevises[position]);
         holder.title_tv.setText(donateModel.getCategory_name());
         holder.details_tv.setText(donateModel.getAdded_at());
-        holder.status_tv.setText(donateModel.getWorking_status());
+        Long i= Long.valueOf(donateModel.getWorking_status());
+        if (i == 0) {
+            holder.status_tv.setText("Not Working");
+            holder.status_tv.setTextColor(Color.parseColor("#FF0000"));
+        }else
+        {
+            holder.status_tv.setText("Working");
+            holder.status_tv.setTextColor(Color.parseColor("#228b22"));
+        }
+        int j= Integer.parseInt(donateModel.getMark_donate());
+        if(j==0){
+            flag=1;
+            holder.statusChange_btn.setText("Not Donated");
+            holder.statusChange_btn.setBackgroundColor(Color.parseColor("#FF0000"));
+
+        }else
+        {
+            holder.statusChange_btn.setText("Donated");
+            holder.statusChange_btn.setBackgroundColor(Color.parseColor("#228b22"));
+            holder.statusChange_btn.setClickable(false);
+        }
+        if(flag==1) {
+            holder.statusChange_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                    alertDialog.setTitle("Please Confirm ");
+                    alertDialog.setMessage("Are you sure to change device status ");
+                    alertDialog.setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            // DO SOMETHING HERE
+                            Toast.makeText(context, "Thanks for confirming", Toast.LENGTH_SHORT).show();
+                           deviceStatusChangeApi();
+                        }
+                    });
+
+                    AlertDialog dialog = alertDialog.create();
+                    dialog.show();
+                }
+
+
+            });
+        }
+        else
+        {
+            holder.statusChange_btn.setClickable(false);
+        }
+
     }
+//Api------
+private void deviceStatusChangeApi() {
+
+}
 
     @Override
     public int getItemCount() {
@@ -60,9 +125,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
        // return listDevises.length;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder   {
         TextView title_tv, details_tv, status_tv;
-        ImageView image;
+        ImageView image,del_iv;
         Button statusChange_btn;
 
 
@@ -73,6 +138,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             status_tv = itemView.findViewById(R.id.status_tv);
             image = itemView.findViewById(R.id.image);
             statusChange_btn = itemView.findViewById(R.id.statusChange_btn);
+           // del_iv=itemView.findViewById(R.id.del_iv);
+
         }
+
+
     }
 }

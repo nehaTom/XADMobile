@@ -40,18 +40,27 @@ public class FragmentOtpVarification extends android.support.v4.app.Fragment {
         StartedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (sharedPreferences.getBoolean("FIRST_LOGIN",false)) {
-//                    Intent i = new Intent(getContext(), Profile.class);
-//                    startActivity(i);
-//
-//                } else {
-//                    Intent i = new Intent(getContext(), Home.class);
-//                    startActivity(i);
-//                }
-                Intent i = new Intent(getContext(), Home.class);
-                startActivity(i);
+                if (sharedPreferences.getBoolean("FIRST_LOGIN",false)) {
+                    Intent i = new Intent(getContext(), Profile.class);
+                    startActivity(i);
+
+                } else {
+                    Intent i = new Intent(getContext(), Home.class);
+                    startActivity(i);
+                }
+//                Intent i = new Intent(getContext(), Home.class);
+//                startActivity(i);
             }
         });
 
+
+        ProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), Profile.class);
+                startActivity(i);
+
+            }
+        });
     }
 }

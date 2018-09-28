@@ -8,13 +8,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:paddingBottom="10dp"
-        android:background="@drawable/border_square_pink"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp"
             android:layout_margin="5dp">
 
         <TextView
@@ -22,8 +20,7 @@
             android:layout_height="wrap_content"
             android:text="Location Name"
             android:padding="5dp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp"
             android:layout_margin="5dp">
 
             <TextView
@@ -63,7 +59,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp"
             android:layout_margin="5dp">
 
             <TextView
@@ -88,7 +83,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp"
             android:layout_margin="5dp">
 
             <TextView
@@ -112,9 +106,12 @@
         </LinearLayout>
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:id="@+id/submit"
+            android:background="@color/colorMenu"
+            android:textColor="@color/colorWhite"
             android:text="Submit"/>
     </LinearLayout>
 
