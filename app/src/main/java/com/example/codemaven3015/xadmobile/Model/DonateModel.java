@@ -4,6 +4,7 @@ import java.util.List;
 
 public class DonateModel {
     private String id;
+    private String deviceId;
     private String user_id;
     private String category_id;
     private String donation_center_id;
@@ -19,6 +20,14 @@ public class DonateModel {
     private String category_name;
     private String donation_center_name;
     private List<Images>imagesList;
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
 
     public String getId() {
         return id;

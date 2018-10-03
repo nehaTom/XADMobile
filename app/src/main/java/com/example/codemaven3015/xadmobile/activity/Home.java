@@ -1,7 +1,9 @@
 package com.example.codemaven3015.xadmobile.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,7 +17,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,6 +38,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -46,8 +52,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 public class Home extends AppCompatActivity
-        implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener,NavigationView.OnNavigationItemSelectedListener {
+        implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, NavigationView.OnNavigationItemSelectedListener {
 
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
@@ -57,14 +66,18 @@ public class Home extends AppCompatActivity
     LocationListener locationListener;
     Context context;
     LocationManager locationManager;
-    String latitude,longitude;
-    boolean gps_enabled,network_enabled;
-    Button donate_btn,recive_btn;
+    Double latitude, longitude;
+    boolean gps_enabled, network_enabled;
+    Button donate_btn, recive_btn;
     boolean doubleBackToExitPressedOnce = false;
     TextView textView;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-
+    private ArrayList permissionsToRequest;
+    private ArrayList permissionsRejected = new ArrayList();
+    private ArrayList permissions = new ArrayList();
+    private final static int ALL_PERMISSIONS_RESULT = 101;
+    LocationTrack locationTrack;
     //-------------------
 
 
@@ -85,22 +98,22 @@ public class Home extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        sharedPreferences=this.getSharedPreferences("User_Info",MODE_PRIVATE);
-        editor=sharedPreferences.edit();
+        sharedPreferences = this.getSharedPreferences("User_Info", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 //----------Button Click ------------------
-        donate_btn=findViewById(R.id.donate_btn);
-        recive_btn=findViewById(R.id.recive_btn);
+        donate_btn = findViewById(R.id.donate_btn);
+        recive_btn = findViewById(R.id.recive_btn);
         donate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Donate.class);
+                Intent intent = new Intent(getApplicationContext(), Donate.class);
                 startActivity(intent);
             }
         });
         recive_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Request.class);
+                Intent intent = new Intent(getApplicationContext(), Request.class);
                 startActivity(intent);
             }
         });
@@ -121,11 +134,101 @@ public class Home extends AppCompatActivity
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        }catch(SecurityException e){
+        } catch (SecurityException e) {
             e.printStackTrace();
+        }
+        permissions.add(ACCESS_FINE_LOCATION);
+        permissions.add(ACCESS_COARSE_LOCATION);
+
+        permissionsToRequest = findUnAskedPermissions(permissions);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+
+            if (permissionsToRequest.size() > 0)
+                requestPermissions((String[]) permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+        }
+
+
+    }
+
+    private ArrayList findUnAskedPermissions(ArrayList wanted) {
+        ArrayList result = new ArrayList();
+
+        for (Object perm : wanted) {
+            if (!hasPermission(perm)) {
+                result.add(perm);
+            }
+        }
+
+        return result;
+    }
+
+    private boolean hasPermission(Object permission) {
+        if (canMakeSmores()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return (checkSelfPermission(String.valueOf(permission)) == PackageManager.PERMISSION_GRANTED);
+            }
+        }
+        return true;
+    }
+
+    private boolean canMakeSmores() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        switch (requestCode) {
+
+            case ALL_PERMISSIONS_RESULT:
+                for (Object perms : permissionsToRequest) {
+                    if (!hasPermission(perms)) {
+                        permissionsRejected.add(perms);
+                    }
+                }
+
+                if (permissionsRejected.size() > 0) {
+
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale((String) permissionsRejected.get(0))) {
+                            showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermissions((String[]) permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
+                                            }
+                                        }
+                                    });
+                            return;
+                        }
+                    }
+
+                }
+
+                break;
         }
 
     }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(Home.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+      //  locationTrack.stopListener();
+    }
+
 //    private void setUserName() {
 //
 //        //  user_name_appmenu.setText("");
@@ -138,7 +241,7 @@ public class Home extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-           // super.onBackPressed();
+            // super.onBackPressed();
         }
         if (doubleBackToExitPressedOnce) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -194,24 +297,24 @@ public class Home extends AppCompatActivity
 
         if (id == R.id.my_profile) {
 //            Toast.makeText(this,"This is in Profile ",Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(getApplicationContext(),ViewProfile.class);
+            Intent intent = new Intent(getApplicationContext(), ViewProfile.class);
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.doner) {
-          //  Toast.makeText(this,"This is in DOner ",Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(getApplicationContext(),Donate.class);
+            //  Toast.makeText(this,"This is in DOner ",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getApplicationContext(), Donate.class);
             startActivity(intent);
         } else if (id == R.id.doner_view) {
-   //         Toast.makeText(this,"This is in DonerView ",Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(getApplicationContext(),DonatedList.class);
+            //         Toast.makeText(this,"This is in DonerView ",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getApplicationContext(), DonatedList.class);
             startActivity(intent);
         } else if (id == R.id.recive) {
-    //        Toast.makeText(this,"This is in Recive ",Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(getApplicationContext(),Request.class);
+            //        Toast.makeText(this,"This is in Recive ",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getApplicationContext(), Request.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
-       //     Toast.makeText(this,"This is in ReciveView ",Toast.LENGTH_LONG).show();
-            Intent intent=new Intent(getApplicationContext(),RequestList.class);
+            //     Toast.makeText(this,"This is in ReciveView ",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getApplicationContext(), RequestList.class);
             startActivity(intent);
         }
 
@@ -232,16 +335,40 @@ public class Home extends AppCompatActivity
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
             }
-        }
-        else {
+        } else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
- //           Add a marker in Sydney and move the camera
+//        locationTrack = new LocationTrack(Home.this);
+//        if (locationTrack.canGetLocation()) {
+//            double longitude = locationTrack.getLongitude();
+//            double latitude = locationTrack.getLatitude();
+//            Log.e("VAluve",""+longitude+""+latitude);
         LatLng india = new LatLng(28.58, 77.30);
-       mMap.addMarker(new MarkerOptions().position(india).title("Marker in india"));
+        mMap.addMarker(new MarkerOptions().position(india).title("Current Location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(india));
+      //  moveToCurrentLocation(india);
+        //   Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
+//        } else {
+//
+//            locationTrack.showSettingsAlert();
+//        }
+        //           Add a marker in Sydney and move the camera
+//        LatLng india = new LatLng(28.58, 77.30);
+//       mMap.addMarker(new MarkerOptions().position(india).title("Marker in india"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(india));
     }
+
+    private void moveToCurrentLocation(LatLng currentLocation) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+        // Zoom in, animating the camera.
+        mMap.animateCamera(CameraUpdateFactory.zoomIn());
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+
+
+    }
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -257,6 +384,40 @@ public class Home extends AppCompatActivity
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
+        getCurrentLocation();
+    }
+
+    private void getCurrentLocation() {
+        mMap.clear();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(location!=null){
+            longitude=location.getLongitude();
+            latitude= location.getLatitude();
+            moveMap();
+        }
+    }
+
+    private void moveMap() {
+        String msg=latitude+","+longitude;
+        LatLng latLng=new LatLng(latitude,longitude);
+        mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("current Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        moveToCurrentLocation(latLng);
+        Log.e("value",msg);
     }
 
     @Override

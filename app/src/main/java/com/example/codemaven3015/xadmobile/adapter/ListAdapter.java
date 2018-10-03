@@ -1,7 +1,10 @@
 package com.example.codemaven3015.xadmobile.adapter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -11,26 +14,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.example.codemaven3015.xadmobile.Constant.Constant;
 import com.example.codemaven3015.xadmobile.Model.DonateModel;
 import com.example.codemaven3015.xadmobile.R;
+import com.example.codemaven3015.xadmobile.api.VolleyJSONRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     Context context;
     String[] listDevises = {"Device1", "Devices2", "Devices3"};
     private ArrayList<DonateModel> donateList;
-    int flag=0;
+    String deviceId;
+    int flag = 0;
+    ProgressDialog progressDialog;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
-    public ListAdapter(Context context,ArrayList<DonateModel>donateList) {
+    public ListAdapter(Context context, ArrayList<DonateModel> donateList) {
         this.context = context;
-          this.donateList=donateList;
+        this.donateList = donateList;
+        sharedPreferences = context.getSharedPreferences("User_Info", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
     }
 
@@ -48,32 +63,33 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, final int position) {
-        DonateModel donateModel=donateList.get(position);
-      //  holder.title_tv.setText(listDevises[position]);
+        DonateModel donateModel = donateList.get(position);
+        //  holder.title_tv.setText(listDevises[position]);
         holder.title_tv.setText(donateModel.getCategory_name());
         holder.details_tv.setText(donateModel.getAdded_at());
-        Long i= Long.valueOf(donateModel.getWorking_status());
+
+
+        Long i = Long.valueOf(donateModel.getWorking_status());
         if (i == 0) {
             holder.status_tv.setText("Not Working");
             holder.status_tv.setTextColor(Color.parseColor("#FF0000"));
-        }else
-        {
+        } else {
             holder.status_tv.setText("Working");
             holder.status_tv.setTextColor(Color.parseColor("#228b22"));
         }
-        int j= Integer.parseInt(donateModel.getMark_donate());
-        if(j==0){
-            flag=1;
+        int j = Integer.parseInt(donateModel.getMark_donate());
+        if (j == 0) {
+            flag = 1;
+            deviceId = donateModel.getDeviceId();
             holder.statusChange_btn.setText("Not Donated");
             holder.statusChange_btn.setBackgroundColor(Color.parseColor("#FF0000"));
 
-        }else
-        {
+        } else {
             holder.statusChange_btn.setText("Donated");
             holder.statusChange_btn.setBackgroundColor(Color.parseColor("#228b22"));
             holder.statusChange_btn.setClickable(false);
         }
-        if(flag==1) {
+        if (flag == 1) {
             holder.statusChange_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -91,8 +107,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                         public void onClick(DialogInterface dialog, int which) {
 
                             // DO SOMETHING HERE
-                            Toast.makeText(context, "Thanks for confirming", Toast.LENGTH_SHORT).show();
-                           deviceStatusChangeApi();
+                            //    Toast.makeText(context, "Thanks for confirming", Toast.LENGTH_SHORT).show();
+                            deviceStatusChangeApi(deviceId);
+                            notifyDataSetChanged();
                         }
                     });
 
@@ -102,32 +119,62 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
 
             });
-        }
-        else
-        {
+        } else {
             holder.statusChange_btn.setClickable(false);
         }
 
     }
-//Api------
-private void deviceStatusChangeApi() {
 
-}
+    //Api------
+    private void deviceStatusChangeApi(String deviceId) {
+        String url = Constant.BaseURL + "devices.php";
+        HashMap<String, String> parms = new HashMap<>();
+        parms.put("user_id", sharedPreferences.getString("user_id", ""));
+        parms.put("change_donate_status", "1");
+        parms.put("donate_status", "1");
+        parms.put("device_id", deviceId);
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Processing......");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(context, url, parms);
+        volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+            @Override
+            public void onSuccess(JSONObject obj) {
+                try {
+                    String status = obj.getString("status");
+
+                    if (status.equalsIgnoreCase("success")) {
+
+
+                        progressDialog.hide();
+                        //notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(VolleyError error) {
+                progressDialog.hide();
+            }
+        });
+    }
 
     @Override
     public int getItemCount() {
-        if(donateList !=null){
+        if (donateList != null) {
             return donateList.size();
-        }else
-        {
+        } else {
             return 0;
         }
-       // return listDevises.length;
+        // return listDevises.length;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder   {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title_tv, details_tv, status_tv;
-        ImageView image,del_iv;
+        ImageView image, del_iv;
         Button statusChange_btn;
 
 
@@ -138,7 +185,7 @@ private void deviceStatusChangeApi() {
             status_tv = itemView.findViewById(R.id.status_tv);
             image = itemView.findViewById(R.id.image);
             statusChange_btn = itemView.findViewById(R.id.statusChange_btn);
-           // del_iv=itemView.findViewById(R.id.del_iv);
+            // del_iv=itemView.findViewById(R.id.del_iv);
 
         }
 

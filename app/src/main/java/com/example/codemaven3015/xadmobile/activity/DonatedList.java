@@ -120,6 +120,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
                 int cont = listData.length();
                 //for (int k = 0; k < cont; k++) {
                     //   donateModel.setId(listData.getString("id"));
+                    donateModel.setDeviceId(listData.getString("id"));
                     donateModel.setId(listData.getString("user_id"));
                     donateModel.setCategory_id(listData.getString("category_id"));
                     donateModel.setDonation_center_id(listData.getString("donation_center_id"));
@@ -162,6 +163,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
         adapter = new ListAdapter(this, donateModelsList);
         list_recycler_view.addItemDecoration(new SpacesItemDecoration(15));
         list_recycler_view.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     //==============================================================OldCode=============================

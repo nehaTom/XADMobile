@@ -219,7 +219,7 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
         volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
             @Override
             public void onSuccess(JSONObject obj) {
-                categoryName.clear();
+              //  categoryName.clear();
                 //      progressDialog.hide();
                 //  Log.d("gjhgjh", obj.toString());
 
@@ -643,6 +643,7 @@ Log.e("image_decode",imageToupload);
 
     }
 
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -670,9 +671,9 @@ Log.e("image_decode",imageToupload);
                     DonateMoney donateMoney = new DonateMoney();
                     return donateMoney;
 
-                case 4:
-                    DonateCSR donateCSR = new DonateCSR();
-                    return donateCSR;
+//                case 4:
+//                    DonateCSR donateCSR = new DonateCSR();
+//                    return donateCSR;
 
                 default:
                     return PlaceholderFragment.newInstance(position + 1);
@@ -683,7 +684,7 @@ Log.e("image_decode",imageToupload);
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 5;
+            return 4;
         }
     }
 }

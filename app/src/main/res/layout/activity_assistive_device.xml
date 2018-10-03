@@ -28,17 +28,16 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/border_square"
-                    android:padding="10dp">
+                    android:background="@drawable/border_square">
 
                     <Spinner
                         android:id="@+id/category_spinner"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="45dp">
 
                     </Spinner>
                 </LinearLayout>
@@ -46,7 +45,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:padding="5dp"
@@ -56,19 +55,19 @@
                 <EditText
                     android:id="@+id/device_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:paddingLeft="5dp"
                     android:background="@drawable/border_square"
                     android:hint="Device Title/Name"
-                    android:inputType="text"
-                    android:padding="10dp" />
+                    android:inputType="text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:padding="5dp"
@@ -78,14 +77,14 @@
                 <EditText
                     android:id="@+id/message"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/border_square"
                     android:hint="Device Description"
                     android:inputType="text"
-                    android:padding="10dp" />
+                    android:paddingLeft="5dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -106,17 +105,16 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/border_square"
-                    android:padding="10dp">
+                    android:background="@drawable/border_square">
 
                     <Spinner
                         android:id="@+id/nearest_center"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="45dp">
 
                     </Spinner>
                 </LinearLayout>
@@ -125,7 +123,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:padding="5dp"
@@ -134,14 +132,14 @@
                 <EditText
                     android:id="@+id/remark"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/border_square"
                     android:hint="Remark/Suggestion/Observation"
                     android:inputType="textMultiLine"
-                    android:padding="10dp" />
+                    android:paddingLeft="5dp" />
             </LinearLayout>
 
             <LinearLayout

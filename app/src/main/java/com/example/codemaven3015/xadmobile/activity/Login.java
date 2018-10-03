@@ -31,6 +31,8 @@ import com.example.codemaven3015.xadmobile.R;
 import com.example.codemaven3015.xadmobile.api.VolleyJSONRequest;
 import com.example.codemaven3015.xadmobile.fragment.FragmentOtpVarification;
 import com.example.codemaven3015.xadmobile.helper.GenericTextWatcher;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -128,7 +130,9 @@ public class Login extends AppCompatActivity {
         Button verfyButton,changePhoneButton,resendButton;
         LoginButton login_button;
         CallbackManager callbackManager;
+        AccessTokenTracker accessTokenTracker;
       public  Boolean isFirstLogging=false;
+      String fname,lname,email,mobileNo,gender;
 
         public PlaceholderFragment() {
         }
@@ -143,6 +147,7 @@ public class Login extends AppCompatActivity {
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
+
         }
 
         @Override
@@ -158,7 +163,7 @@ public class Login extends AppCompatActivity {
                 lastNameEditText=rootView.findViewById(R.id.nameLast_editText);
                 phoneEditText = rootView.findViewById(R.id.login_editText);
                 login_button=rootView.findViewById(R.id.login_button);
-              //  callbackManager=CallbackManager.Factory.create();
+         //       callbackManager=CallbackManager.Factory.create();
                     facebookLogin();
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -187,11 +192,16 @@ public class Login extends AppCompatActivity {
                 login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
+
+                        GraphLoginRequest(loginResult.getAccessToken());
                         Log.e("Facebook_Success", loginResult.toString());
                         //getUserDetails(loginResult);
-                        String Token = loginResult.getAccessToken().getToken();
-                        String facebookAccessToken = Token;
-                        Intent intent=new Intent(getContext(),Home.class);
+//                        String Token = loginResult.getAccessToken().getToken();
+//                        String facebookAccessToken = Token;
+                        isFirstLogging=true;
+                        editor.putBoolean("FIRST_LOGIN",isFirstLogging);
+                        editor.commit();
+                       Intent intent=new Intent(getContext(),Home.class);
                         startActivity(intent);
 
 
@@ -211,31 +221,73 @@ public class Login extends AppCompatActivity {
                     }
                 });
             }
+
+        protected void GraphLoginRequest(AccessToken accessToken){
+            Log.e("InsideGraphLogin","2222222222222222222");
+            GraphRequest graphRequest = GraphRequest.newMeRequest(accessToken,
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+
+                            try {
+
+                                // Adding all user info one by one into TextView.
+                                Log.e("InsideGraphLogin1","----222----------");
+                                fname = jsonObject.getString("first_name");
+                                lname = jsonObject.getString("last_name");
+                                email = jsonObject.getString("email");
+                                gender = jsonObject.getString("gender");
+
+Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
+                                Intent intent=new Intent(getContext(),Home.class);
+                        startActivity(intent);
+                                sharedPreferences.getString("FIRST_NAME",fname);
+                                sharedPreferences.getString("LAST_NAME",lname);
+                                sharedPreferences.getString("Gender",gender);
+                                sharedPreferences.getString("Email_ID",email);
+                                editor.commit();
+
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+            Bundle bundle = new Bundle();
+            bundle.putString(
+                    "fields",
+                    "email,gender,last_name,first_name"
+            );
+            graphRequest.setParameters(bundle);
+            graphRequest.executeAsync();
+
+        }
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
 
-        protected void getUserDetails(LoginResult loginResult) {
-            GraphRequest data_request = GraphRequest.newMeRequest(
-                    loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                        @Override
-                        public void onCompleted(
-                                JSONObject json_object,
-                                GraphResponse response) {
-                            Intent intent = new Intent(getActivity(), Profile.class);
-                            intent.putExtra("userProfile", json_object.toString());
-                            startActivity(intent);
-                        }
-
-                    });
-            Bundle permission_param = new Bundle();
-            permission_param.putString("fields", "id,name,email,picture.width(120).height(120)");
-            data_request.setParameters(permission_param);
-            data_request.executeAsync();
-
-        }
+//        protected void getUserDetails(LoginResult loginResult) {
+//            GraphRequest data_request = GraphRequest.newMeRequest(
+//                    loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+//                        @Override
+//                        public void onCompleted(
+//                                JSONObject json_object,
+//                                GraphResponse response) {
+//                            Intent intent = new Intent(getActivity(), Profile.class);
+//                            intent.putExtra("userProfile", json_object.toString());
+//                            startActivity(intent);
+//                        }
+//
+//                    });
+//            Bundle permission_param = new Bundle();
+//            permission_param.putString("fields", "id,name,email,picture.width(120).height(120)");
+//            data_request.setParameters(permission_param);
+//            data_request.executeAsync();
+//
+//        }
 
         public void onResume() {
             super.onResume();
@@ -341,7 +393,7 @@ public class Login extends AppCompatActivity {
             String url = Constant.registrationURL;
             HashMap<String, String> params = new HashMap<>();
 
-            params.put("register","1");
+            params.put("register","1");  //flag
             params.put("mobile_no",phoneEditText.getText().toString());
             params.put("first_name",firstNameEditText.getText().toString());
             params.put("last_name",lastNameEditText.getText().toString());

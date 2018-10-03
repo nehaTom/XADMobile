@@ -10,17 +10,17 @@ import android.view.ViewGroup;
 import com.example.codemaven3015.xadmobile.R;
 
 public class DonateCSR extends Fragment{
-    View v;
-
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.activity_csr_fund, container, false);
-
-        //setWidgets(v);
-
-        return v;
-    }
+//    View v;
+//
+//
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+//        v = inflater.inflate(R.layout.activity_csr_fund, container, false);
+//
+//        //setWidgets(v);
+//
+//        return v;
+//    }
 }
 

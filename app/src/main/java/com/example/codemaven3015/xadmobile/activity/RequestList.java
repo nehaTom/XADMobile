@@ -156,6 +156,7 @@ public class RequestList extends AppCompatActivity implements NavigationView.OnN
         rladapter = new RequestListAdapter(this, requestModelsList);
         requestlist_recycler_view.addItemDecoration(new SpacesItemDecoration(15));
         requestlist_recycler_view.setAdapter(rladapter);
+        rladapter.notifyDataSetChanged();
     }
 
     @Override
