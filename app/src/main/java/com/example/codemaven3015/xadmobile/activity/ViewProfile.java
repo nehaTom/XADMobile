@@ -4,14 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -24,8 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-
-import static com.example.codemaven3015.xadmobile.activity.Login.progressDialog;
 
 public class ViewProfile extends AppCompatActivity {
     TextView fname, lname, emailId, contactNo, adharNo, address, panNo, gender;
@@ -58,7 +53,7 @@ Log.d("InViewProdile","hiiiiiiiiii11111111");
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),Profile.class);
+                Intent intent=new Intent(getApplicationContext(),UserProfile.class);
                 startActivity(intent);
             }
         });
@@ -72,7 +67,7 @@ Log.d("InViewProdile","hiiiiiiiiii11111111");
         params.put("user_id",sharedPreferences.getString("user_id",""));
         String s=sharedPreferences.getString("user_id","");
         progressDialog = new ProgressDialog(ViewProfile.this);
-        progressDialog.setMessage("Geting Profile");
+        progressDialog.setMessage("Geting UserProfile");
         progressDialog.setCanceledOnTouchOutside(false);
    //     progressDialog.show();
         VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(ViewProfile.this,url,params);

@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Profile extends AppCompatActivity {
+public class UserProfile extends AppCompatActivity {
     EditText fname, lname, emailId, contactNo, adharNo, address, panNo;
     RadioGroup gender;
     Button update;

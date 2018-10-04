@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.Donate"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="9"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="9">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:padding="5dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
                     android:layout_marginLeft="10dp"
-                    android:text="Select Category" />
+                    android:text="Select Category"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square">
 
                     <Spinner
@@ -48,21 +55,21 @@
                 android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:padding="5dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <EditText
                     android:id="@+id/device_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:paddingLeft="5dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
                     android:hint="Device Title/Name"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:paddingLeft="5dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -70,21 +77,21 @@
                 android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:padding="5dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <EditText
                     android:id="@+id/message"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
                     android:hint="Device Description"
                     android:inputType="text"
-                    android:paddingLeft="5dp"/>
+                    android:paddingLeft="5dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -92,23 +99,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:padding="5dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
                     android:layout_marginLeft="10dp"
-                    android:text="Nearest Facilation Center" />
+                    android:text="Nearest Facilation Center"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square">
 
                     <Spinner
@@ -126,16 +133,17 @@
                 android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:padding="5dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="5dp">
+
                 <EditText
                     android:id="@+id/remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/border_square"
                     android:hint="Remark/Suggestion/Observation"
                     android:inputType="textMultiLine"
@@ -155,8 +163,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
-                    android:textStyle="bold"
-                    android:text="Upload photo your device" />
+                    android:text="Upload photo your device"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="100dp"
@@ -185,8 +193,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:textStyle="bold"
-                    android:text="Working Status" />
+                    android:text="Working Status"
+                    android:textStyle="bold" />
 
                 <RadioGroup
                     android:id="@+id/working_status"
@@ -198,8 +206,8 @@
                         android:id="@+id/working"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Working"
-                        android:checked="true"/>
+                        android:checked="true"
+                        android:text="Working" />
 
                     <RadioButton
                         android:id="@+id/not_working"
@@ -213,16 +221,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="1"
                 android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
                     android:layout_marginLeft="10dp"
-                    android:text="Mark Product for Donation" />
+                    android:text="Mark Product for Donation"
+                    android:textStyle="bold" />
 
                 <RadioGroup
                     android:id="@+id/radio_mark"
@@ -234,8 +242,8 @@
                         android:id="@+id/yes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Yes"
-                        android:checked="true"/>
+                        android:checked="true"
+                        android:text="Yes" />
 
                     <RadioButton
                         android:id="@+id/no"
@@ -249,9 +257,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginTop="2dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <Button
@@ -260,12 +268,12 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:background="@color/colorMenu"
-                    android:textColor="@color/colorWhite"
-                    android:text="Submit" />
+                    android:text="Submit"
+                    android:textColor="@color/colorWhite" />
 
             </LinearLayout>
 
         </LinearLayout>
+    </ScrollView>
 
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

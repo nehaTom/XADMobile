@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -38,6 +39,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -131,8 +133,9 @@ public class Login extends AppCompatActivity {
         LoginButton login_button;
         CallbackManager callbackManager;
         AccessTokenTracker accessTokenTracker;
-      public  Boolean isFirstLogging=false;
-      String fname,lname,email,mobileNo,gender;
+        public  Boolean isFirstLogging=false;
+        String fname,lname,email,mobileNo,gender;
+        private String facebook_id,f_name, m_name, l_name, genderfb, profile_image, full_name, email_id;
 
         public PlaceholderFragment() {
         }
@@ -163,8 +166,8 @@ public class Login extends AppCompatActivity {
                 lastNameEditText=rootView.findViewById(R.id.nameLast_editText);
                 phoneEditText = rootView.findViewById(R.id.login_editText);
                 login_button=rootView.findViewById(R.id.login_button);
-         //       callbackManager=CallbackManager.Factory.create();
-                    facebookLogin();
+                //       callbackManager=CallbackManager.Factory.create();
+                facebookLogin();
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -186,41 +189,95 @@ public class Login extends AppCompatActivity {
         }
 
         private void facebookLogin() {
-                callbackManager = CallbackManager.Factory.create();
-                login_button.setReadPermissions("email");
-                login_button.setFragment(this);
-                login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
 
-                        GraphLoginRequest(loginResult.getAccessToken());
-                        Log.e("Facebook_Success", loginResult.toString());
-                        //getUserDetails(loginResult);
-//                        String Token = loginResult.getAccessToken().getToken();
-//                        String facebookAccessToken = Token;
-                        isFirstLogging=true;
-                        editor.putBoolean("FIRST_LOGIN",isFirstLogging);
+            callbackManager = CallbackManager.Factory.create();
+            login_button.setReadPermissions("email");
+            login_button.setFragment(this);
+            login_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    facebook_id=f_name= m_name= l_name= genderfb= profile_image= full_name= email_id="";
+                    RequestData();
+//                    GraphLoginRequest(loginResult.getAccessToken());
+//                    Log.e("Facebook_Success", loginResult.toString());
+//                    //getUserDetails(loginResult);
+////                        String Token = loginResult.getAccessToken().getToken();
+////                        String facebookAccessToken = Token;
+                    isFirstLogging=true;
+                    editor.putBoolean("FIRST_LOGIN",isFirstLogging);
+                    editor.commit();
+                   Profile profile = Profile.getCurrentProfile();
+                    if (profile != null) {
+                        facebook_id=profile.getId();
+                        Log.e("facebook_id", facebook_id);
+                        f_name=profile.getFirstName();
+                        Log.e("f_name", f_name);
+                        m_name=profile.getMiddleName();
+                        Log.e("m_name", m_name);
+                        l_name=profile.getLastName();
+                        Log.e("l_name", l_name);
+                        full_name=profile.getName();
+                        Log.e("full_name", full_name);
+                        profile_image=profile.getProfilePictureUri(400, 400).toString();
+                        Log.e("profile_image", profile_image);
+                    }
+                    Intent intent=new Intent(getContext(),UserProfile.class);
+                    startActivity(intent);
+
+
+
+                }
+
+
+                @Override
+                public void onCancel() {
+                    // App code
+                }
+
+                @Override
+                public void onError(FacebookException exception) {
+                    // App code
+                    Log.e("Facebook_Error", exception.getMessage());
+                }
+            });
+        }
+
+        private void RequestData() {
+            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject object,GraphResponse response) {
+
+                    JSONObject json = response.getJSONObject();
+                    System.out.println("Json data :"+json);
+                    Log.e("fbData",""+json);
+                    try {
+                        full_name=json.getString("name");
+                        f_name=json.getString("email");
+                        sharedPreferences.getString("FIRST_NAME",fname);
+                        sharedPreferences.getString("Email_ID",email);
                         editor.commit();
-                       Intent intent=new Intent(getContext(),Home.class);
-                        startActivity(intent);
 
-
-
+                        Log.e("fbdata","--"+full_name+"----"+f_name);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+                    try {
+                        if(json != null){
+                            String text = "<b>Name :</b> "+json.getString("name")+"<br><br><b>Email :</b> "+json.getString("email")+"<br><br><b>UserProfile link :</b> "+json.getString("link");
+                           // details_txt.setText(Html.fromHtml(text));
+                           // profile.setProfileId(json.getString("id"));
+                        }
 
-
-                    @Override
-                    public void onCancel() {
-                        // App code
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                        Log.e("Facebook_Error", exception.getMessage());
-                    }
-                });
-            }
+                }
+            });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,link,email,picture");
+            request.setParameters(parameters);
+            request.executeAsync();
+        }
 
         protected void GraphLoginRequest(AccessToken accessToken){
             Log.e("InsideGraphLogin","2222222222222222222");
@@ -238,9 +295,9 @@ public class Login extends AppCompatActivity {
                                 email = jsonObject.getString("email");
                                 gender = jsonObject.getString("gender");
 
-Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
+                                Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
                                 Intent intent=new Intent(getContext(),Home.class);
-                        startActivity(intent);
+                                startActivity(intent);
                                 sharedPreferences.getString("FIRST_NAME",fname);
                                 sharedPreferences.getString("LAST_NAME",lname);
                                 sharedPreferences.getString("Gender",gender);
@@ -276,7 +333,7 @@ Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
 //                        public void onCompleted(
 //                                JSONObject json_object,
 //                                GraphResponse response) {
-//                            Intent intent = new Intent(getActivity(), Profile.class);
+//                            Intent intent = new Intent(getActivity(), UserProfile.class);
 //                            intent.putExtra("userProfile", json_object.toString());
 //                            startActivity(intent);
 //                        }
@@ -367,8 +424,8 @@ Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
                         }else{
                             String msg=obj.getString("message");
                             if(inputValidation()) {
-                                   callNext();   //here we calling the api of registration
-                        }
+                                callNext();   //here we calling the api of registration
+                            }
 //                            Toast.makeText(getContext(),msg,
 //                                    Toast.LENGTH_LONG).show();
 
@@ -388,8 +445,8 @@ Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
         }
         //-----------------------Api calling  for Registration-------------------
         private void callNext() {
-         //   String url = "http://xadnew.quickbooksupport365.com/service/register.php";
-           // String url = Constant.OldURL+"register.php";
+            //   String url = "http://xadnew.quickbooksupport365.com/service/register.php";
+            // String url = Constant.OldURL+"register.php";
             String url = Constant.registrationURL;
             HashMap<String, String> params = new HashMap<>();
 
@@ -489,7 +546,7 @@ Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
                 @Override
                 public void onClick(View v) {
                     if(otpVerifyFlag==1) {
-                       verfyOTPLogin();
+                        verfyOTPLogin();
                     }
                     else{
                         verfyOTP();
@@ -524,7 +581,7 @@ Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
             params.put("otp","1234");
             String str=sharedPreferences.getString("LAST_ID","");
             Log.d("Hiiii",""+str.toString());
-          //  Toast.makeText(getActivity(), "Hiii"+str, Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(getActivity(), "Hiii"+str, Toast.LENGTH_SHORT).show();
             params.put("last_inser_id",str);
 
             VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
@@ -561,7 +618,7 @@ Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
 //                            mViewPager.setCurrentItem(2);
                             Intent intent=new Intent(getActivity(),Home.class);
                             startActivity(intent);
-                             getActivity().finish();
+                            getActivity().finish();
                         }else{
                             String msg=obj.getString("message");
                             Toast.makeText(getContext(),msg,
@@ -586,8 +643,8 @@ Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
 
         private void verfyOTP()     {
 
-          //  String url = "http://xadnew.quickbooksupport365.com/service/register.php";
-           // String url = Constant.OldURL+"register.php";
+            //  String url = "http://xadnew.quickbooksupport365.com/service/register.php";
+            // String url = Constant.OldURL+"register.php";
             String url = Constant.registrationURL;
             HashMap<String, String> params = new HashMap<>();
             params.put("varify","1");
@@ -595,7 +652,7 @@ Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
             params.put("otp","1234");
             String str=sharedPreferences.getString("LAST_ID","");
             Log.d("Hiiii",""+str.toString());
-     //       Toast.makeText(getActivity(), "Hiii"+str, Toast.LENGTH_SHORT).show();
+            //       Toast.makeText(getActivity(), "Hiii"+str, Toast.LENGTH_SHORT).show();
             params.put("last_inser_id",str);
 
             VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
@@ -672,8 +729,8 @@ Log.e("fbValues",""+fname+""+lname+""+email+""+gender);
                     FragmentOtpVarification fragmentOtpVarification = new FragmentOtpVarification();
                     return fragmentOtpVarification;
 
-                 default:
-                        return PlaceholderFragment.newInstance(position + 1);
+                default:
+                    return PlaceholderFragment.newInstance(position + 1);
             }
 
         }

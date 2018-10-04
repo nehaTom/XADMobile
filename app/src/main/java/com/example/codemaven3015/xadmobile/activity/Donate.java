@@ -303,7 +303,7 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
         int id = item.getItemId();
 
         if (id == R.id.my_profile) {
-//            Toast.makeText(this,"This is in Profile ",Toast.LENGTH_LONG).show();
+//            Toast.makeText(this,"This is in UserProfile ",Toast.LENGTH_LONG).show();
             Intent intent=new Intent(getApplicationContext(),ViewProfile.class);
             startActivity(intent);
             // Handle the camera action
@@ -392,7 +392,7 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
                 public void run() {
                     category_spinner.setAdapter(arrayAdapter);
                 }
-            }, 1000);
+            }, 2000);
 
 
           //  category_spinner.setSelection(0,false);
@@ -425,7 +425,7 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
                 public void run() {
                     nearest_center.setAdapter(arrayAdapter1);
                 }
-            }, 1000);
+            }, 2000);
 
 
             //     nearest_center.setSelection(1,true);
@@ -535,8 +535,8 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
                     lastBitmap = bitmap;
                     //encoding image to string
                     deviceImagView.setImageBitmap(lastBitmap);
-                     imageToupload = getStringImage(lastBitmap);
-Log.e("image_decode",imageToupload);
+                    imageToupload = getStringImage(lastBitmap);
+                    Log.e("image_decode", imageToupload);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -569,9 +569,9 @@ Log.e("image_decode",imageToupload);
             obj_data.put("description",DeviceDescripEditText.getText().toString());
             JSONArray jsonArray=new JSONArray();
           // imageToupload=imageToupload;
-           jsonArray.put(imageToupload);
+           jsonArray.put("data:image/png;base64,"+imageToupload);
            //image[0]=imageToupload;
-            Log.e("Image",""+imageToupload);
+            Log.e("Image","data:image/png;base64,"+imageToupload);
             //jsonArray.put(2);
             obj_data.put("images",jsonArray);
             parms.put("responsedata",obj_data.toString().replace("\\",""));
@@ -582,13 +582,15 @@ Log.e("image_decode",imageToupload);
             volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
                 @Override
                 public void onSuccess(JSONObject obj) {
-
-                   Toast.makeText(getContext(),""+obj,Toast.LENGTH_LONG);
+Log.e("checkApi","onSuccess------------------------------");
+                   Toast.makeText(getContext(),"22222222222222"+obj,Toast.LENGTH_LONG);
 
                 }
 
                 @Override
                 public void onFailure(VolleyError error) {
+                    Log.e("checkApi","onFailure44444444444444444444444444");
+                //    Toast.makeText(getContext(),"00000000000000000000000000"+obj,Toast.LENGTH_LONG);
 
                 }
             });

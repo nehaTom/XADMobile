@@ -374,7 +374,7 @@ public class Request extends AppCompatActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         if (id == R.id.my_profile) {
-//            Toast.makeText(this,"This is in Profile ",Toast.LENGTH_LONG).show();
+//            Toast.makeText(this,"This is in UserProfile ",Toast.LENGTH_LONG).show();
             Intent intent=new Intent(getApplicationContext(),ViewProfile.class);
             startActivity(intent);
             // Handle the camera action

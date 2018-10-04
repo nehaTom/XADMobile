@@ -34,8 +34,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DonatedList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-//    public class DonatedList extends AppCompatActivity
+public class DonatedList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    //    public class DonatedList extends AppCompatActivity
 //            implements NavigationView.OnNavigationItemSelectedListener {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -44,6 +44,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
     ListAdapter adapter;
     ArrayList<DonateModel> donateModelsList;
     TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -78,12 +79,12 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
 
     private void AddedDeviceApi() {
 
-      //  Toast.makeText(getApplicationContext(),"This in donate list AddedDeviceApi",Toast.LENGTH_SHORT).show();
-     //   String url = "http://xadnew.quickbooksupport365.com/service/devices.php";
-        String url = Constant.BaseURL+"devices.php";
+        //  Toast.makeText(getApplicationContext(),"This in donate list AddedDeviceApi",Toast.LENGTH_SHORT).show();
+        //   String url = "http://xadnew.quickbooksupport365.com/service/devices.php";
+        String url = Constant.BaseURL + "devices.php";
         HashMap<String, String> parms = new HashMap<>();
         parms.put("user_id", sharedPreferences.getString("user_id", ""));  //user id
-        String s=sharedPreferences.getString("user_id", "");
+        String s = sharedPreferences.getString("user_id", "");
         parms.put("get_devices", "1");   //flag
 
         VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getApplicationContext(), url, parms);
@@ -93,7 +94,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
                 try {
                     String status = obj.getString("status");
                     if (status.equalsIgnoreCase("success")) {
-               //         Toast.makeText(getApplicationContext(),"This in donate list AddedApiSuccess",Toast.LENGTH_LONG).show();
+                        //         Toast.makeText(getApplicationContext(),"This in donate list AddedApiSuccess",Toast.LENGTH_LONG).show();
                         parseJson1(obj);
                     }
                 } catch (JSONException e) {
@@ -103,14 +104,14 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
 
             @Override
             public void onFailure(VolleyError error) {
-             //   Toast.makeText(getApplicationContext(),"This in donate list AddedApifail",Toast.LENGTH_LONG).show();
+                //   Toast.makeText(getApplicationContext(),"This in donate list AddedApifail",Toast.LENGTH_LONG).show();
 
             }
         });
     }
 
     private void parseJson1(JSONObject obj) {
-   //     donateModel = new DonateModel();
+        //     donateModel = new DonateModel();
         try {
             JSONObject object = obj.getJSONObject("data");
             int count = object.length();
@@ -119,30 +120,30 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
                 JSONObject listData = object.getJSONObject(String.valueOf(i));
                 int cont = listData.length();
                 //for (int k = 0; k < cont; k++) {
-                    //   donateModel.setId(listData.getString("id"));
-                    donateModel.setDeviceId(listData.getString("id"));
-                    donateModel.setId(listData.getString("user_id"));
-                    donateModel.setCategory_id(listData.getString("category_id"));
-                    donateModel.setDonation_center_id(listData.getString("donation_center_id"));
-                    donateModel.setDevice_name(listData.getString("device_name"));
-                    donateModel.setRemarks(listData.getString("remarks"));
-                    donateModel.setWorking_status(listData.getString("working_status"));
-                    donateModel.setContact_to(listData.getString("contact_to"));
-                    donateModel.setMark_donate(listData.getString("mark_donate"));
-                    donateModel.setPickup_request(listData.getString("pickup_request"));
-                    donateModel.setDescription(listData.getString("description"));
-                    donateModel.setIs_assigned(listData.getString("is_assigned"));
-                    donateModel.setAdded_at(listData.getString("added_at"));
-                    donateModel.setCategory_name(listData.getString("category_name"));
-                    donateModel.setDonation_center_name(listData.getString("donation_center_name"));
+                //   donateModel.setId(listData.getString("id"));
+                donateModel.setDeviceId(listData.getString("id"));
+                donateModel.setId(listData.getString("user_id"));
+                donateModel.setCategory_id(listData.getString("category_id"));
+                donateModel.setDonation_center_id(listData.getString("donation_center_id"));
+                donateModel.setDevice_name(listData.getString("device_name"));
+                donateModel.setRemarks(listData.getString("remarks"));
+                donateModel.setWorking_status(listData.getString("working_status"));
+                donateModel.setContact_to(listData.getString("contact_to"));
+                donateModel.setMark_donate(listData.getString("mark_donate"));
+                donateModel.setPickup_request(listData.getString("pickup_request"));
+                donateModel.setDescription(listData.getString("description"));
+                donateModel.setIs_assigned(listData.getString("is_assigned"));
+                donateModel.setAdded_at(listData.getString("added_at"));
+                donateModel.setCategory_name(listData.getString("category_name"));
+                donateModel.setDonation_center_name(listData.getString("donation_center_name"));
 
-                    donateModelsList.add(donateModel);
-//                    adapter.notifyDataSetChanged();
-                    Log.d("Rai", "data : " + donateModelsList.toString());
-                }
-   //         donateModelsList.add(donateModel);
+                donateModelsList.add(donateModel);
+                adapter.notifyDataSetChanged();
+                Log.d("Rai", "data : " + donateModelsList.toString());
+            }
+            //         donateModelsList.add(donateModel);
             adapter.notifyDataSetChanged();
-                Log.d("Rai1", "data Count : " + donateModelsList.size());
+            Log.d("Rai1", "data Count : " + donateModelsList.size());
             //}
 
         } catch (JSONException e) {
@@ -167,7 +168,6 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
     }
 
     //==============================================================OldCode=============================
-
 
 
     @Override
@@ -209,19 +209,19 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
         int id = item.getItemId();
 
         if (id == R.id.my_profile) {
-            Intent intent=new Intent(getApplicationContext(),ViewProfile.class);
+            Intent intent = new Intent(getApplicationContext(), ViewProfile.class);
             startActivity(intent);
         } else if (id == R.id.doner) {
-            Intent intent=new Intent(getApplicationContext(),Donate.class);
+            Intent intent = new Intent(getApplicationContext(), Donate.class);
             startActivity(intent);
         } else if (id == R.id.doner_view) {
-            Intent intent=new Intent(getApplicationContext(),DonatedList.class);
+            Intent intent = new Intent(getApplicationContext(), DonatedList.class);
             startActivity(intent);
         } else if (id == R.id.recive) {
-            Intent intent=new Intent(getApplicationContext(),Request.class);
+            Intent intent = new Intent(getApplicationContext(), Request.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
-            Intent intent=new Intent(getApplicationContext(),RequestList.class);
+            Intent intent = new Intent(getApplicationContext(), RequestList.class);
             startActivity(intent);
         }
 

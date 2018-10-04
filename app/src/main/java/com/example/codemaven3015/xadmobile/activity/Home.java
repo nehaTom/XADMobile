@@ -296,7 +296,7 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.my_profile) {
-//            Toast.makeText(this,"This is in Profile ",Toast.LENGTH_LONG).show();
+//            Toast.makeText(this,"This is in UserProfile ",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getApplicationContext(), ViewProfile.class);
             startActivity(intent);
             // Handle the camera action
@@ -326,7 +326,7 @@ public class Home extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
