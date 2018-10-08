@@ -2,6 +2,7 @@ package com.example.codemaven3015.xadmobile.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.example.codemaven3015.xadmobile.Model.DonateModel;
 import com.example.codemaven3015.xadmobile.Model.RequestModel;
 import com.example.codemaven3015.xadmobile.R;
+import com.example.codemaven3015.xadmobile.activity.Prescription;
 
 import java.util.ArrayList;
 
@@ -34,7 +36,7 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
 
     @NonNull
     @Override
-    public RequestListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.response_list_card_view, null);
@@ -43,13 +45,21 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RequestListAdapter.ViewHolder holder, int position) {
-        RequestModel requestModel=requestList.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        final RequestModel requestModel=requestList.get(position);
         holder.title_tv.setText(requestModel.getCategory_name());
         holder.title_tv1.setText(requestModel.getAdded_at());
         holder.title_tv2.setText(requestModel.getPatient_condition());
         holder.details_tv.setText(requestModel.getDescription());
         holder.status_tv.setText(requestModel.getStatus());
+        holder.desp_tv2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context, Prescription.class);
+                intent.putExtra("imvUrl",requestModel.getPhoto());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -65,9 +75,8 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView title_tv, details_tv, status_tv,title_tv1,title_tv2;
-        ImageView image;
-        Button statusChange_btn;
+        TextView title_tv, details_tv, status_tv,title_tv1,title_tv2,desp_tv2;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -76,6 +85,7 @@ public class RequestListAdapter extends RecyclerView.Adapter<RequestListAdapter.
             title_tv2 = itemView.findViewById(R.id.title_tv2);
             details_tv = itemView.findViewById(R.id.details_tv);
             status_tv = itemView.findViewById(R.id.status_tv);
+            desp_tv2=itemView.findViewById(R.id.desp_tv2);
 
         }
     }

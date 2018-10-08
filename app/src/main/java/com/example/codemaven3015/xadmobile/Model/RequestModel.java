@@ -15,8 +15,16 @@ public class RequestModel {
     private String added_by;//user_id
     private String category_name;
     private String donation_center_name;
+    private String photo;
     private List<Photo> photoList;
 
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
 
     public String getId() {
         return id;

@@ -31,6 +31,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
+                        android:layout_marginStart="10dp"
                         android:textStyle="bold"
                         android:text="DeviceTitle" />
                     <TextView
@@ -51,6 +52,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Details"
+                        android:layout_marginStart="10dp"
+
                         android:id="@+id/details_tv" />
 
                     <TextView
@@ -61,16 +64,40 @@
                         android:layout_alignParentEnd="true"
                         android:text="DeviceTitle" />
                 </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/status_tv"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                    android:id="@+id/status_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Status"
                     android:textStyle="bold"
+                        android:layout_marginStart="10dp"
                     android:textSize="15dp"
                     android:textColor="@color/colorRed"
                     android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/desp_tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:text="Description" />
+            </RelativeLayout>
+            <!--<TextView-->
+                    <!--android:id="@+id/status_tv"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0dp"-->
+                    <!--android:text="Status"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:textSize="15dp"-->
+                    <!--android:textColor="@color/colorRed"-->
+                    <!--android:layout_weight="1"/>-->
 
             </LinearLayout>
         </LinearLayout>

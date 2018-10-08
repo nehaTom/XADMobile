@@ -1,9 +1,11 @@
 package com.example.codemaven3015.xadmobile.activity;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -43,6 +45,7 @@ public class RequestList extends AppCompatActivity implements NavigationView.OnN
     RequestListAdapter rladapter;
     RequestModel requestModel;
     ArrayList<RequestModel> requestModelsList;
+    ProgressDialog progressDialog;
     TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +66,20 @@ public class RequestList extends AppCompatActivity implements NavigationView.OnN
         navigationView.setNavigationItemSelectedListener(this);
 //        textView=navigationView.getHeaderView(0).findViewById(R.id.textView);
 //        setUserName();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Loading List");
+        sharedPreferences = this.getSharedPreferences("User_Info", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        Handler handler = new Handler();
+        handler.postDelayed(
+                new Runnable() {
+                    public void run() {
+                        RequestDeviceApi();
+                    }
+                }, 1000);
 
-
-        RequestDeviceApi();
+      //  RequestDeviceApi();
         setListAdapter();
     }
 
@@ -76,7 +90,7 @@ public class RequestList extends AppCompatActivity implements NavigationView.OnN
 //    }
 
     private void RequestDeviceApi() {
-
+progressDialog.show();
    //     String url = "http://xadnew.quickbooksupport365.com/service/request.php";
         String url = Constant.BaseURL+"request.php";
         HashMap<String, String> parms = new HashMap<>();
@@ -90,6 +104,7 @@ public class RequestList extends AppCompatActivity implements NavigationView.OnN
                 try {
                     String status = obj.getString("status");
                     if (status.equalsIgnoreCase("success")) {
+                        progressDialog.hide();
                         //         Toast.makeText(getApplicationContext(),"This in donate list AddedApiSuccess",Toast.LENGTH_LONG).show();
                         parseData(obj);
                     }
@@ -100,6 +115,7 @@ public class RequestList extends AppCompatActivity implements NavigationView.OnN
 
             @Override
             public void onFailure(VolleyError error) {
+                progressDialog.hide();
            //     Toast.makeText(getApplicationContext(),"This in donate list AddedApifail",Toast.LENGTH_LONG).show();
 
             }
@@ -126,14 +142,13 @@ public class RequestList extends AppCompatActivity implements NavigationView.OnN
                 requestModel.setStatus(listData.getString("status"));
                 requestModel.setAssigned_device_id(listData.getString("assigned_device_id"));
                 requestModel.setAdded_at(listData.getString("added_at"));
-                requestModel.setAdded_by(listData.getString("added_by"));
+             //   requestModel.setAdded_by(listData.getString("added_by"));
                 requestModel.setCategory_name(listData.getString("category_name"));
                 requestModel.setDonation_center_name(listData.getString("donation_center_name"));
-
-
+                requestModel.setPhoto(listData.getString("photo"));
 
                 requestModelsList.add(requestModel);
-                rladapter.notifyDataSetChanged();
+               // rladapter.notifyDataSetChanged();
                 Log.d("Rai", "data : " + requestModelsList.toString());
             }
             //         donateModelsList.add(donateModel);

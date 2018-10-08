@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -383,11 +384,6 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             initWidgets(rootView);
 
-
-            String [] values =
-                    {"Time at Residence","Under 6 months","6-12 months","1-2 years","2-4 years","4-8 years","8-15 years","Over 15 years",};
-
-
            final ArrayAdapter<String>  arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categoryName);
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
           //  arrayAdapter.notifyDataSetChanged();
@@ -502,6 +498,13 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
 
                         try {
                             saveDevice();
+//                            Handler handler = new Handler();
+//                            handler.postDelayed(
+//                                    new Runnable() {
+//                                        public void run() {
+//
+//                                        }
+//                                    }, 3000);
                             Intent intent = new Intent(getContext(), DonatedList.class);
                             startActivity(intent);
 
@@ -589,7 +592,7 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
                 @Override
                 public void onSuccess(JSONObject obj) {
                     Log.e("checkApi","onSuccess------------------------------");
-                    Toast.makeText(getContext(),"22222222222222"+obj,Toast.LENGTH_LONG);
+                   // Toast.makeText(getContext(),"22222222222222"+obj,Toast.LENGTH_LONG);
 
                 }
 

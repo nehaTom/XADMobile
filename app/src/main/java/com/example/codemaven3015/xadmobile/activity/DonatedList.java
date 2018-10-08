@@ -1,8 +1,10 @@
 package com.example.codemaven3015.xadmobile.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,6 +46,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
     ListAdapter adapter;
     ArrayList<DonateModel> donateModelsList;
     TextView textView;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +66,19 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
 //        textView=navigationView.getHeaderView(0).findViewById(R.id.textView);
 //        setUserName();
 
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Loading List");
         sharedPreferences = this.getSharedPreferences("User_Info", MODE_PRIVATE);
         editor = sharedPreferences.edit();
-
-        AddedDeviceApi();
+        Handler handler = new Handler();
+        handler.postDelayed(
+                new Runnable() {
+                    public void run() {
+                        AddedDeviceApi();
+                    }
+                }, 1000);
+        //  AddedDeviceApi();
         setListAdapter();
 
     }
@@ -78,7 +89,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
 //    }
 
     private void AddedDeviceApi() {
-
+        progressDialog.show();
         //  Toast.makeText(getApplicationContext(),"This in donate list AddedDeviceApi",Toast.LENGTH_SHORT).show();
         //   String url = "http://xadnew.quickbooksupport365.com/service/devices.php";
         String url = Constant.BaseURL + "devices.php";
@@ -94,6 +105,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
                 try {
                     String status = obj.getString("status");
                     if (status.equalsIgnoreCase("success")) {
+                        progressDialog.hide();
                         //         Toast.makeText(getApplicationContext(),"This in donate list AddedApiSuccess",Toast.LENGTH_LONG).show();
                         parseJson1(obj);
                     }
@@ -104,6 +116,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
 
             @Override
             public void onFailure(VolleyError error) {
+                progressDialog.hide();
                 //   Toast.makeText(getApplicationContext(),"This in donate list AddedApifail",Toast.LENGTH_LONG).show();
 
             }
@@ -114,6 +127,8 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
         //     donateModel = new DonateModel();
         try {
             JSONObject object = obj.getJSONObject("data");
+            Log.e("ListValue", "" + object);
+
             int count = object.length();
             for (int i = 0; i < count; i++) {
                 donateModel = new DonateModel();
@@ -139,7 +154,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
                 donateModel.setImages(listData.getString("images"));
 
                 donateModelsList.add(donateModel);
-               // adapter.notifyDataSetChanged();
+                // adapter.notifyDataSetChanged();
                 Log.d("Rai", "data : " + donateModelsList.toString());
             }
             //         donateModelsList.add(donateModel);
@@ -163,7 +178,8 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
         list_recycler_view.setLayoutManager(mLayoutManager);
         //--------------------------------
         adapter = new ListAdapter(this, donateModelsList);
-       // list_recycler_view.addItemDecoration(new SpacesItemDecoration(15));
+        // list_recycler_view.addItemDecoration(new SpacesItemDecoration(15));
+        Log.e("ValueOfModleList", "" + donateModelsList);
         list_recycler_view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -177,11 +193,11 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent a = new Intent(this,Donate.class);
+            Intent a = new Intent(this, Donate.class);
             a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(a);
             finish();
-           // super.onBackPressed();
+            // super.onBackPressed();
         }
     }
 
