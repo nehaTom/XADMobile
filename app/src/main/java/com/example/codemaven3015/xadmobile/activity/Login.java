@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -137,6 +138,7 @@ public class Login extends AppCompatActivity {
         String fname,lname,email,mobileNo,gender;
         private String facebook_id,f_name, m_name, l_name, genderfb, profile_image, full_name, email_id;
 
+
         public PlaceholderFragment() {
         }
 
@@ -221,8 +223,8 @@ public class Login extends AppCompatActivity {
                         profile_image=profile.getProfilePictureUri(400, 400).toString();
                         Log.e("profile_image", profile_image);
                     }
-                    Intent intent=new Intent(getContext(),UserProfile.class);
-                    startActivity(intent);
+//                    Intent intent=new Intent(getContext(),Home.class);
+//                    startActivity(intent);
 
 
 
@@ -243,6 +245,7 @@ public class Login extends AppCompatActivity {
         }
 
         private void RequestData() {
+
             GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                 @Override
                 public void onCompleted(JSONObject object,GraphResponse response) {
@@ -251,11 +254,22 @@ public class Login extends AppCompatActivity {
                     System.out.println("Json data :"+json);
                     Log.e("fbData",""+json);
                     try {
+                        facebook_id=json.getString("id");
                         full_name=json.getString("name");
-                        f_name=json.getString("email");
-                        sharedPreferences.getString("FIRST_NAME",fname);
-                        sharedPreferences.getString("Email_ID",email);
+                        String[] parts = full_name.split(" ", 2);
+                        String fname = parts[0];
+                        String lname = parts[1];
+
+                        email_id=json.getString("email");
+                        editor.putString("FB_ID",facebook_id);
+                        editor.putString("FIRST_NAME",fname);
+                        editor.putString("LAST_NAME",lname);
+                        editor.putString("Email_ID",email_id);
+//                        sharedPreferences.getString("FB_ID",facebook_id);
+//                        sharedPreferences.getString("FIRST_NAME",full_name);
+//                        sharedPreferences.getString("Email_ID",email_id);
                         editor.commit();
+                        fbRegisterUser();
 
                         Log.e("fbdata","--"+full_name+"----"+f_name);
                     } catch (JSONException e) {
@@ -276,7 +290,72 @@ public class Login extends AppCompatActivity {
             Bundle parameters = new Bundle();
             parameters.putString("fields", "id,name,link,email,picture");
             request.setParameters(parameters);
-            request.executeAsync();
+            request.executeAsync();//executeAsync();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            },80000);
+        }
+
+        private void fbRegisterUser() {
+            String url = Constant.BaseURL+"register.php";
+            HashMap<String, String> params = new HashMap<>();
+
+            params.put("facebook","1");  //flag
+            params.put("fb_id",sharedPreferences.getString("FB_ID",""));
+            String s=sharedPreferences.getString("FB_ID","");
+            params.put("first_name",sharedPreferences.getString("FIRST_NAME",""));
+            String s1=sharedPreferences.getString("FIRST_NAME","");
+//            params.put("name",sharedPreferences.getString("Email_ID",""));
+//            String s2=sharedPreferences.getString("Email_ID","");
+            VolleyJSONRequest volleyJSONRequest = new VolleyJSONRequest(getContext(),url,params);
+            progressDialog = new ProgressDialog(getContext());
+            //progressDialog.setMessage("Sending OTP");
+            progressDialog.setCanceledOnTouchOutside(false);
+            //progressDialog.show();
+            volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
+                @Override
+                public void onSuccess(JSONObject obj) {
+                   // progressDialog.hide();
+
+                    try {
+                        String status = obj.getString("status");
+                        if(status.equalsIgnoreCase("success")){
+                            isFirstLogging=true;
+                           // editor.putString("PHONE",phoneEditText.getText().toString());
+                            JSONObject objData = new JSONObject();
+                            objData = obj.getJSONObject("data");
+//                            editor.putString("LAST_ID",objData.getString("last_insert_id"));
+//                            editor.putString("FIRST_NAME",firstNameEditText.getText().toString());
+//                            editor.putString("LAST_NAME",lastNameEditText.getText().toString());
+                           // objData.getString("last_insert_id")   sharedPreferences.getString("user_id","")
+                            editor.putString("user_id",objData.getString("id"));
+                            editor.putBoolean("FIRST_LOGIN",isFirstLogging);
+                            editor.commit();
+                           // mViewPager.setCurrentItem(2);
+                            Intent intent=new Intent(getActivity(),Home.class);
+                            startActivity(intent);
+
+                        }else{
+                            String msg=obj.getString("message");
+                            Toast.makeText(getContext(),msg,
+                                    Toast.LENGTH_LONG).show();
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(VolleyError error) {
+                    //progressDialog.hide();
+
+                }
+            });
         }
 
         protected void GraphLoginRequest(AccessToken accessToken){

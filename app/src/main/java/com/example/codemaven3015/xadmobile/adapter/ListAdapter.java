@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.codemaven3015.xadmobile.Constant.Constant;
 import com.example.codemaven3015.xadmobile.Model.DonateModel;
 import com.example.codemaven3015.xadmobile.R;
@@ -67,7 +73,34 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         //  holder.title_tv.setText(listDevises[position]);
         holder.title_tv.setText(donateModel.getCategory_name());
         holder.details_tv.setText(donateModel.getAdded_at());
-
+        Log.e("imageInlist",""+donateModel.getImages());
+//        Glide.with(context)
+//                .load(donateModel.getImages())
+//                .listener(new RequestListener<String, GlideDrawable>() {
+//                    @Override
+//                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                        // TODO: 08/11/16 handle failure
+//                     //   holder.mProgress.setVisibility(View.GONE);
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                        // image ready, hide progress now
+//                     //   holder.mProgress.setVisibility(View.GONE);
+//                        return false;   // return false if you want Glide to handle everything else.
+//                    }
+//                })
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)   // cache both original & resized image
+//                .centerCrop()
+//                .crossFade()
+//                .into(holder.image);
+        Glide.with(context)
+                .load(donateModel.getImages()) // image url
+                .error(R.drawable.noimage)  // any image in case of error
+                .override(200, 200) // resizing
+                .centerCrop()
+                .into(holder.image);
 
         Long i = Long.valueOf(donateModel.getWorking_status());
         if (i == 0) {

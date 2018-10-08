@@ -5,15 +5,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="20dp"
-        android:layout_marginBottom="20dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="20dp"
             android:orientation="vertical"
-
             android:padding="10dp">
 
             <TextView
@@ -45,55 +43,67 @@
                         android:id="@+id/checkbox_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Select All" />
+                        android:text="Select All"
+                        android:onClick="onCheckboxClicked"/>
 
                     <CheckBox
                         android:id="@+id/checkbox_sun"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sunday" />
+                        android:text="Sunday"
+                        android:onClick="onCheckboxClicked"/>
 
                     <CheckBox
                         android:id="@+id/checkbox_mon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Monday" />
+                        android:text="Monday"
+                        android:onClick="onCheckboxClicked"/>
                 </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
                     <CheckBox
                         android:id="@+id/checkbox_tue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tuesday" />
+                        android:text="Tuesday"
+                        android:onClick="onCheckboxClicked"/>
 
                     <CheckBox
                         android:id="@+id/checkbox_wed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Wednesday" />
+                        android:text="Wednesday"
+                        android:onClick="onCheckboxClicked"/>
 
                     <CheckBox
                         android:id="@+id/checkbox_thu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Thursday" />
-                    </LinearLayout>
+                        android:text="Thursday"
+                        android:onClick="onCheckboxClicked"/>
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
                     <CheckBox
                         android:id="@+id/checkbox_fri"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="friday" />
+                        android:text="friday"
+                        android:onClick="onCheckboxClicked"/>
 
                     <CheckBox
                         android:id="@+id/checkbox_sat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Saturday" />
+                        android:text="Saturday"
+                        android:onClick="onCheckboxClicked"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -138,25 +148,29 @@
                     android:id="@+id/checkbox_slot1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8:00 AM-11:00 AM" />
+                    android:text="8:00 AM-11:00 AM"
+                    android:onClick="onCheckboxClicked"/>
 
                 <CheckBox
                     android:id="@+id/checkbox_slot2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="11:00 AM-2:00 PM" />
+                    android:text="11:00 AM-2:00 PM"
+                    android:onClick="onCheckboxClicked"/>
 
                 <CheckBox
                     android:id="@+id/checkbox_slot3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2:00 PM-5:00 PM" />
+                    android:text="2:00 PM-5:00 PM"
+                    android:onClick="onCheckboxClicked"/>
 
                 <CheckBox
                     android:id="@+id/checkbox_slot4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5:00 PM-8:00 PM" />
+                    android:text="5:00 PM-8:00 PM"
+                    android:onClick="onCheckboxClicked"/>
 
             </LinearLayout>
 
@@ -164,6 +178,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -183,15 +198,23 @@
                     android:padding="5dp" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/Submit"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_height="40dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
                 android:layout_gravity="center"
-                android:background="@color/colorMenu"
-                android:textColor="@color/colorWhite"
-                android:text="Submit" />
+                android:layout_marginBottom="100dp">
+
+                <Button
+                    android:id="@+id/submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorMenu"
+                    android:gravity="center"
+                    android:text="Submit"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

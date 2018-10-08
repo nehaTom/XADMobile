@@ -270,7 +270,12 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+
+            Intent a = new Intent(this,Home.class);
+            a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(a);
+            finish();
+            //super.onBackPressed();
         }
     }
 
@@ -547,7 +552,7 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             lastBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
-            String encodedImage = Base64.encodeToString(imageBytes,  Base64.NO_PADDING );
+            String encodedImage = Base64.encodeToString(imageBytes,  Base64.NO_WRAP );
             return encodedImage;
         }
 
@@ -574,16 +579,17 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
             Log.e("Image","data:image/png;base64,"+imageToupload);
             //jsonArray.put(2);
             obj_data.put("images",jsonArray);
+            Log.e("ImgJsonArray",""+jsonArray);
             parms.put("responsedata",obj_data.toString().replace("\\",""));
-            Log.e("obj_data",""+obj_data.toString());
+            Log.e("obj_data",""+obj_data.toString().replace("\\",""));
 
             //   Toast.makeText(getContext(),"JsonArray"+jsonArray+" obj Data"+obj_data,Toast.LENGTH_LONG).show();
             VolleyJSONRequest volleyJSONRequest=new VolleyJSONRequest(getContext(),url,parms);
             volleyJSONRequest.executeStringRequest(new VolleyJSONRequest.VolleyJSONRequestInterface() {
                 @Override
                 public void onSuccess(JSONObject obj) {
-Log.e("checkApi","onSuccess------------------------------");
-                   Toast.makeText(getContext(),"22222222222222"+obj,Toast.LENGTH_LONG);
+                    Log.e("checkApi","onSuccess------------------------------");
+                    Toast.makeText(getContext(),"22222222222222"+obj,Toast.LENGTH_LONG);
 
                 }
 
@@ -666,6 +672,7 @@ Log.e("checkApi","onSuccess------------------------------");
                 case 1:
                     WorkAsVolunter wrkasv = new WorkAsVolunter();
                     return wrkasv;
+
                 case 2:
                     SpaceForStorage spaceForStorage = new SpaceForStorage();
                     return spaceForStorage;
@@ -673,6 +680,7 @@ Log.e("checkApi","onSuccess------------------------------");
                     DonateMoney donateMoney = new DonateMoney();
                     return donateMoney;
 
+//
 //                case 4:
 //                    DonateCSR donateCSR = new DonateCSR();
 //                    return donateCSR;

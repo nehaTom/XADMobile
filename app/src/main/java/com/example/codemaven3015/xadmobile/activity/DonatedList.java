@@ -115,7 +115,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
         try {
             JSONObject object = obj.getJSONObject("data");
             int count = object.length();
-            for (int i = 0; i < count - 1; i++) {
+            for (int i = 0; i < count; i++) {
                 donateModel = new DonateModel();
                 JSONObject listData = object.getJSONObject(String.valueOf(i));
                 int cont = listData.length();
@@ -136,9 +136,10 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
                 donateModel.setAdded_at(listData.getString("added_at"));
                 donateModel.setCategory_name(listData.getString("category_name"));
                 donateModel.setDonation_center_name(listData.getString("donation_center_name"));
+                donateModel.setImages(listData.getString("images"));
 
                 donateModelsList.add(donateModel);
-                adapter.notifyDataSetChanged();
+               // adapter.notifyDataSetChanged();
                 Log.d("Rai", "data : " + donateModelsList.toString());
             }
             //         donateModelsList.add(donateModel);
@@ -162,7 +163,7 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
         list_recycler_view.setLayoutManager(mLayoutManager);
         //--------------------------------
         adapter = new ListAdapter(this, donateModelsList);
-        list_recycler_view.addItemDecoration(new SpacesItemDecoration(15));
+       // list_recycler_view.addItemDecoration(new SpacesItemDecoration(15));
         list_recycler_view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -176,7 +177,11 @@ public class DonatedList extends AppCompatActivity implements NavigationView.OnN
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent a = new Intent(this,Donate.class);
+            a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(a);
+            finish();
+           // super.onBackPressed();
         }
     }
 

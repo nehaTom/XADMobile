@@ -165,7 +165,10 @@ public class RequestList extends AppCompatActivity implements NavigationView.OnN
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent a = new Intent(this,Request.class);
+            a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(a);
+            finish();
         }
     }
 
@@ -210,7 +213,7 @@ public class RequestList extends AppCompatActivity implements NavigationView.OnN
             Intent intent=new Intent(getApplicationContext(),Request.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
-            Intent intent=new Intent(getApplicationContext(),DonatedList.class);
+            Intent intent=new Intent(getApplicationContext(),RequestList.class);
             startActivity(intent);
         }
 

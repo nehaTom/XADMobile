@@ -143,20 +143,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Upload Doctors prescription" />
+                    android:text="Upload Doctors prescription(Max Image Size 1.5MB)" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/border_square">
+                    android:layout_marginTop="5dp">
 
                     <ImageView
                         android:id="@+id/imv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@mipmap/ic_launcher" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@mipmap/ic_launcher" />
                 </LinearLayout>
             </LinearLayout>
 

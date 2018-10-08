@@ -156,20 +156,21 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:text="Upload photo your device"
+                    android:layout_marginLeft="5dp"
+                    android:text="Upload photo your device(Max Image size 1.5MB)"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center"
                     android:layout_marginRight="10dp">
 
                     <ImageView
@@ -256,7 +257,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
