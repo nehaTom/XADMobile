@@ -148,6 +148,13 @@ public class Donate extends AppCompatActivity implements NavigationView.OnNaviga
 
         //   loadSpinnerData();
 
+        Bundle extras = getIntent().getExtras();
+        if(extras != null ) {
+            //position = extras.getInt("viewpager_position");
+
+            mViewPager.setCurrentItem(2);
+        }
+
     }
 
 
